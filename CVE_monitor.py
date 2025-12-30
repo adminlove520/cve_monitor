@@ -9,7 +9,7 @@
 
 import json
 import requests
-from datetime import datetime
+from datetime import datetime, timedelta
 import hashlib
 import os
 import logging
@@ -928,7 +928,236 @@ class OKCVECrawler(BaseCrawler):
         info.info = ''
         return info
 
+class QianxinCrawler(BaseCrawler):
+    """
+    奇安信CERT爬虫类
+    """
+
+    def __init__(self):
+        super(QianxinCrawler, self).__init__()
+        # 奇安信API地址
+        self.api_url = 'https://ti.qianxin.com/alpha-api/v2/vuln/one-day'
+        # 要“中危”也算就在这里加
+        self.level_ok = {"高危", "极危", "严重"}
+
+    def NAME_CH(self):
+        return '奇安信CERT'
+
+    def NAME_EN(self):
+        return 'Qianxin CERT'
+
+    def get_vulnerabilities(self):
+        return []  # 使用get_cves方法获取漏洞信息
+
+    def get_cves(self):
+        """
+        从奇安信CERT获取最新漏洞信息
+        :return: 漏洞信息列表
+        """
+        try:
+            log_info(f"[{self.NAME_CH()}] 开始获取最新漏洞信息")
+            
+            # 获取当前日期
+            current_date = datetime.now().strftime('%Y-%m-%d')
+            log_info(f"[{self.NAME_CH()}] 使用当前日期 {current_date} 过滤漏洞信息")
+            
+            # 发送请求
+            response = requests.get(
+                self.api_url,
+                headers=self.headers(),
+                params={"date": current_date},
+                timeout=self.timeout
+            )
+            response.raise_for_status()  # 检查HTTP错误
+            data = response.json()
+            
+            # 提取漏洞信息
+            all_cve_list = []
+            rows = self._collect_rows(data)
+            
+            for row in rows:
+                pub_date = row.get("publish_time") or row.get("date") or ""
+                if pub_date == current_date:
+                    level = self._pick_level(row)
+                    if level in self.level_ok:
+                        cve_info = self.to_cve(row)
+                        if cve_info.is_valid():
+                            all_cve_list.append(cve_info)
+            
+            # 过滤已经存在于数据库的漏洞
+            new_cve_list = []
+            for cve_info in all_cve_list:
+                if not is_vulnerability_exists(cve_info.id):
+                    new_cve_list.append(cve_info)
+                    log_info(f"发现新奇安信漏洞: {cve_info.title}")
+                else:
+                    log_info(f"奇安信漏洞已存在，跳过: {cve_info.title}")
+            
+            log_info(f"[{self.NAME_CH()}] 获取到 {len(new_cve_list)}/{len(all_cve_list)} 条新漏洞信息")
+            return new_cve_list
+        except Exception as e:
+            log_error(f"[{self.NAME_CH()}] 获取漏洞信息失败: {str(e)}")
+            return []
+
+    def _collect_rows(self, obj):
+        """把 one-day 返回的五个列表合并"""
+        rows = []
+        data = obj.get("data", {})
+        for key in ("vuln_add", "vuln_update", "key_vuln_add",
+                    "poc_exp_add", "patch_add"):
+            val = data.get(key)
+            if isinstance(val, list):
+                rows.extend(val)
+        return rows
+
+    def _pick_level(self, row):
+        """不同接口的严重度字段兜底"""
+        for k in ("rating_level", "level", "risk_level", "rating_level_cn"):
+            if row.get(k):
+                return row[k]
+        return "未知"
+
+    def to_cve(self, item):
+        """
+        转换奇安信API返回的数据为CVEInfo对象
+        :param item: 单个漏洞数据
+        :return: CVEInfo对象
+        """
+        cve = CVEInfo()
+        
+        # 获取ID，如果为空则生成一个唯一ID
+        cve_id = item.get("cve_code") or item.get("cve_id") or ""
+        if cve_id:
+            cve.id = cve_id
+        else:
+            # 生成唯一ID
+            title = item.get("vuln_name") or item.get("title") or ""
+            time_str = item.get("publish_time") or item.get("date") or ""
+            unique_str = f"qianxin-{title}-{time_str}-{datetime.now().timestamp()}"
+            cve.id = hashlib.md5(unique_str.encode('utf-8')).hexdigest()
+            
+        # 设置基本属性
+        cve.title = item.get("vuln_name") or item.get("title") or "未知漏洞"
+        cve.time = item.get("publish_time") or item.get("date") or datetime.now().strftime("%Y-%m-%d")
+        cve.cve = cve_id
+        cve.src = self.NAME_CH()
+        
+        # 设置URL
+        cve.url = f"https://ti.qianxin.com/vulnerability/{cve_id}" if cve_id else "https://ti.qianxin.com/"
+        cve.detail_url = cve.url  # 确保 detail_url 有值
+        cve.source = self.NAME_CH()
+        cve.info = item.get("description", "")
+        
+        return cve
+
+class ThreatBookCrawler(BaseCrawler):
+    """
+    微步爬虫类
+    """
+
+    def __init__(self):
+        super(ThreatBookCrawler, self).__init__()
+        # 微步API地址
+        self.api_url = 'https://x.threatbook.com/v5/node/vul_module/homePage'
+        # 微步请求头
+        self._headers = {
+            "Referer": "https://x.threatbook.com/",
+            "Accept-Language": "zh-CN,zh;q=0.9",
+            "User-Agent": "Mozilla/5.0",
+        }
+
+    def NAME_CH(self):
+        return '微步'
+
+    def NAME_EN(self):
+        return 'ThreatBook'
+
+    def get_vulnerabilities(self):
+        return []  # 使用get_cves方法获取漏洞信息
+
+    def get_cves(self):
+        """
+        从微步获取最新漏洞信息
+        :return: 漏洞信息列表
+        """
+        try:
+            log_info(f"[{self.NAME_CH()}] 开始获取最新漏洞信息")
+            
+            # 获取当前日期
+            current_date = datetime.now().strftime('%Y-%m-%d')
+            log_info(f"[{self.NAME_CH()}] 使用当前日期 {current_date} 过滤漏洞信息")
+            
+            # 发送请求
+            response = requests.get(
+                self.api_url,
+                headers=self._headers,
+                timeout=self.timeout
+            )
+            response.raise_for_status()  # 检查HTTP错误
+            data = response.json()
+            
+            # 提取漏洞信息
+            all_cve_list = []
+            
+            for key in ("premium", "highRisk"):
+                for it in data.get("data", {}).get(key, []):
+                    item = self._to_cve(it)
+                    if item and item.time == current_date:
+                        all_cve_list.append(item)
+            
+            # 过滤已经存在于数据库的漏洞
+            new_cve_list = []
+            for cve_info in all_cve_list:
+                if not is_vulnerability_exists(cve_info.id):
+                    new_cve_list.append(cve_info)
+                    log_info(f"发现新微步漏洞: {cve_info.title}")
+                else:
+                    log_info(f"微步漏洞已存在，跳过: {cve_info.title}")
+            
+            log_info(f"[{self.NAME_CH()}] 获取到 {len(new_cve_list)}/{len(all_cve_list)} 条新漏洞信息")
+            return new_cve_list
+        except Exception as e:
+            log_error(f"[{self.NAME_CH()}] 获取漏洞信息失败: {str(e)}")
+            return []
+
+    def _to_cve(self, it):
+        """
+        转换微步API返回的数据为CVEInfo对象
+        :param it: 单个漏洞数据
+        :return: CVEInfo对象或None
+        """
+        ts = it.get("vuln_update_time") or it.get("vulnPublishTime")
+        if not ts:
+            return None
+            
+        cve = CVEInfo()
+        cve_id = it.get("id") or ""
+        
+        # 获取ID，如果为空则生成一个唯一ID
+        if cve_id:
+            cve.id = cve_id
+        else:
+            # 生成唯一ID
+            title = it.get("vuln_name_zh") or it.get("vulnNameZh") or it.get("title", "")
+            unique_str = f"threatbook-{title}-{ts}-{datetime.now().timestamp()}"
+            cve.id = hashlib.md5(unique_str.encode('utf-8')).hexdigest()
+            
+        # 设置基本属性
+        cve.title = it.get("vuln_name_zh") or it.get("vulnNameZh") or it.get("title", "未知漏洞")
+        cve.time = ts[:10]  # 仅取 'YYYY-MM-DD'
+        cve.cve = cve_id
+        cve.src = self.NAME_CH()
+        
+        # 设置URL
+        cve.url = f"https://x.threatbook.com/v5/vuln/detail/{cve_id}" if cve_id else "https://x.threatbook.com/"
+        cve.detail_url = cve.url  # 确保 detail_url 有值
+        cve.source = self.NAME_CH()
+        cve.info = it.get("description", "")
+        
+        return cve
+
 # 读取配置文件
+
 def load_config():
     try:
         log_info("开始读取配置文件...")
@@ -965,11 +1194,22 @@ def load_config():
             log_info(f"启用Telegram推送，token长度: {len(tgbot_token)}, group_id: {tgbot_group_id}")
             return app_name, tgbot_token, tgbot_group_id
         
+        # 检查Discard配置
+        elif int(config['all_config']['discard'][0]['enable']) == 1:
+            discard_webhook = get_env_or_config('DISCARD_WEBHOOK', config['all_config']['discard'][1]['webhook'])
+            app_name = config['all_config']['discard'][2]['app_name']
+            # 新增：获取send_normal_msg和send_daily_report配置
+            send_normal_msg = get_env_or_config('DISCARD_SEND_NORMAL_MSG', config['all_config']['discard'][3].get('send_normal_msg', 'ON'))
+            send_daily_report = get_env_or_config('DISCARD_SEND_DAILY_REPORT', config['all_config']['discard'][4].get('send_daily_report', 'ON'))
+            log_info(f"启用Discard推送，webhook长度: {len(discard_webhook)}, 每日推送: {send_normal_msg}, 周报推送: {send_daily_report}")
+            return app_name, discard_webhook, send_normal_msg, send_daily_report
+        
         # 没有启用任何推送
         elif (int(config['all_config']['tgbot'][0]['enable']) == 0 and
               int(config['all_config']['feishu'][0]['enable']) == 0 and
-              int(config['all_config']['dingding'][0]['enable']) == 0):
-            log_error("配置文件有误, 五个社交软件的enable都为0")
+              int(config['all_config']['dingding'][0]['enable']) == 0 and
+              int(config['all_config']['discard'][0]['enable']) == 0):
+            log_error("配置文件有误, 所有社交软件的enable都为0")
             return None
     except Exception as e:
         log_error(f"读取配置文件失败: {e}")
@@ -1033,6 +1273,56 @@ def load_run_config():
             'max_run_time': 3540,
             'exception_retry_interval': 60,
             'github_token': ''
+        }
+
+# 加载数据源配置
+def load_datasource_config():
+    """加载数据源配置"""
+    try:
+        with open('config.yaml', 'r', encoding='utf-8') as f:
+            config = yaml.load(f, Loader=yaml.FullLoader)
+        
+        # 从配置文件获取数据源配置
+        datasource_config = config.get('all_config', {}).get('datasources', [])
+        
+        # 构建数据源配置字典
+        datasource_dict = {
+            'oscs1024': 1,
+            'antiycloud': 1,
+            'tenable': 1,
+            'microsoft': 1,
+            'okcve': 1,
+            'qianxin': 1,
+            'threatbook': 1
+        }
+        
+        for item in datasource_config:
+            for key, value in item.items():
+                datasource_dict[key] = value
+        
+        # 优先从环境变量读取配置
+        # 环境变量优先级高于配置文件
+        datasource_dict['oscs1024'] = int(os.environ.get('DATASOURCE_OSCS1024', datasource_dict.get('oscs1024', 1)))
+        datasource_dict['antiycloud'] = int(os.environ.get('DATASOURCE_ANTIYCLOUD', datasource_dict.get('antiycloud', 1)))
+        datasource_dict['tenable'] = int(os.environ.get('DATASOURCE_TENABLE', datasource_dict.get('tenable', 1)))
+        datasource_dict['microsoft'] = int(os.environ.get('DATASOURCE_MICROSOFT', datasource_dict.get('microsoft', 1)))
+        datasource_dict['okcve'] = int(os.environ.get('DATASOURCE_OKCVE', datasource_dict.get('okcve', 1)))
+        datasource_dict['qianxin'] = int(os.environ.get('DATASOURCE_QIANXIN', datasource_dict.get('qianxin', 1)))
+        datasource_dict['threatbook'] = int(os.environ.get('DATASOURCE_THREATBOOK', datasource_dict.get('threatbook', 1)))
+        
+        return datasource_dict
+    except Exception as e:
+        log_error(f"加载数据源配置失败: {e}")
+        log_error(traceback.format_exc())
+        # 返回默认配置
+        return {
+            'oscs1024': 1,
+            'antiycloud': 1,
+            'tenable': 1,
+            'microsoft': 1,
+            'okcve': 1,
+            'qianxin': 1,
+            'threatbook': 1
         }
 
 # 检查是否是夜间时间
@@ -1204,6 +1494,17 @@ def insert_into_sqlite3_without_check(cve_list):
                         elif app_name == "tgbot":
                             push_result = tgbot(push_text, push_msg, config[1], config[2])
                             log_info(f"Telegram推送结果: {'成功' if push_result else '失败'} - {translated_title}")
+                        elif app_name == "discard":
+                            # 检查是否启用每日推送
+                            send_normal_msg = config[2] if len(config) > 2 else 'ON'
+                            # 确保send_normal_msg是字符串类型
+                            send_normal_msg_str = str(send_normal_msg).upper()
+                            if send_normal_msg_str == 'ON':
+                                push_result = discard(push_text, push_msg, config[1])
+                                log_info(f"Discard推送结果: {'成功' if push_result else '失败'} - {translated_title}")
+                            else:
+                                log_info(f"Discard每日推送已禁用，跳过推送: {translated_title}")
+                                push_result = True
                         else:
                             log_warn(f"未知的推送方式: {app_name}")
                     except Exception as e:
@@ -1277,6 +1578,80 @@ def tgbot(text, msg, token, group_id):
         log_error(traceback.format_exc())
         return False
 
+# Discard推送
+def discard(text, msg, webhook, is_daily_report=False, html_file=None, markdown_content=None):
+    try:
+        log_info(f"准备推送Discard消息，webhook: {webhook[:20]}...，内容长度: {len(msg)}, 报告模式: {is_daily_report}")
+        
+        headers = {
+            "Content-Type": "application/json;charset=utf-8"
+        }
+        
+        if is_daily_report and html_file:
+            # 推送报告（日报或周报），Discord Webhook不支持直接发送HTML格式，使用文本格式发送链接
+            # 生成GitHub Pages URL
+            github_pages_url = f"https://adminlove520.github.io/CVE_monitor/{html_file}"
+            
+            # 构建推送内容
+            current_date = datetime.now().strftime('%Y-%m-%d')
+            
+            # 确定报告类型前缀
+            report_prefix = "Weekly_" if "Weekly_" in html_file else "Daily_"
+            
+            push_content = f"**{text}**\n共收集到 {msg.split()[1]} 个漏洞\n欢迎提交建议：[GitHub Issue](https://github.com/adminlove520/CVE_monitor/issues/new/choose)\n{report_prefix}{current_date}: {github_pages_url}\n\n"
+            
+            # 添加markdown内容（预览格式）
+            if markdown_content:
+                # 移除markdown标题和最后更新时间，只保留文章列表
+                lines = markdown_content.split('\n')
+                preview_content = []
+                include_lines = False
+                for line in lines:
+                    # 从第一个## 开始记录文章列表
+                    if line.startswith('## '):
+                        include_lines = True
+                    # 跳过Power By信息
+                    if line.strip().startswith('Power By') or line.strip().startswith('---'):
+                        continue
+                    if include_lines:
+                        preview_content.append(line)
+                
+                # 拼接预览内容，移除多余空行
+                push_content += "威胁情报预览：\n"
+                filtered_preview = [line for line in preview_content if line.strip()]
+                push_content += '\n'.join(filtered_preview[:20])  # 只显示前20行
+                if len(filtered_preview) > 20:
+                    push_content += f"\n\n... 共 {len(filtered_preview)} 行，显示前20行"
+            
+            # 添加Power By信息
+            push_content += "\n---\nPower By 东方隐侠安全团队·Anonymous@ [隐侠安全客栈](https://www.dfyxsec.com/)\n---"
+            
+            data = {
+                "content": push_content
+            }
+        else:
+            # 推送每日消息
+            data = {
+                "content": f"**{text}**\n{msg}\n\n---\nPower By 东方隐侠安全团队·Anonymous@ [https://www.dfyxsec.com/](https://www.dfyxsec.com/)"
+            }
+        
+        response = requests.post(webhook, json=data, headers=headers, timeout=10)
+        response.raise_for_status()
+        
+        log_info(f"Discard推送返回结果: {response.text}")
+        
+        # Discard推送API返回格式: {'ok': True}
+        if isinstance(response.json(), dict) and response.json().get('ok'):
+            log_info("Discard推送成功")
+            return True
+        else:
+            log_error(f"Discard推送返回异常结果: {response.json()}")
+            return False
+    except Exception as e:
+        log_error(f"Discard推送出现异常: {e}")
+        log_error(traceback.format_exc())
+        return False
+
 # 发送漏洞信息到社交工具
 def send_alerts(cve_list):
     try:
@@ -1324,6 +1699,14 @@ def send_alerts(cve_list):
                     elif app_name == "tgbot":
                         tgbot(text, msg, config[1], config[2])
                         log_info(f"成功通过Telegram推送漏洞信息：{title}")
+                    elif app_name == "discard":
+                        # 检查是否启用每日推送
+                        send_normal_msg = config[2] if len(config) > 2 else 'ON'
+                        if send_normal_msg.upper() == 'ON':
+                            discard(text, msg, config[1])
+                            log_info(f"成功通过Discard推送漏洞信息：{title}")
+                        else:
+                            log_info(f"Discard每日推送已禁用，跳过推送: {title}")
                 except Exception as e:
                     log_error(f"推送漏洞信息失败：{e}")
     except Exception as e:
@@ -1370,6 +1753,8 @@ def generate_daily_report():
     
     # 准备漏洞数据，用于HTML模板
     vuln_list = []
+    source_distribution = {}
+    
     for vuln in vulnerabilities:
         vuln_id, title, time_str, source, detail_url, cve_ids = vuln
         markdown_content += f"## [{title}]({detail_url})\n"
@@ -1377,6 +1762,9 @@ def generate_daily_report():
         markdown_content += f"- 来源：{source}\n"
         markdown_content += f"- 时间：{time_str}\n"
         markdown_content += f"- 详情：{detail_url}\n\n"
+        
+        # 统计来源分布
+        source_distribution[source] = source_distribution.get(source, 0) + 1
         
         # 添加到漏洞列表
         vuln_list.append({
@@ -1387,6 +1775,21 @@ def generate_daily_report():
             'source': source,
             'time': time_str
         })
+    
+    # 计算昨日漏洞数量
+    yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
+    conn = sqlite3.connect('data.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT COUNT(*) FROM vulnerabilities WHERE time = ?", (yesterday,))
+    yesterday_count = cursor.fetchone()[0]
+    conn.close()
+    
+    # 生成威胁情报前瞻内容
+    threat_intelligence_forecast = {
+        'total_vulns': len(vulnerabilities),
+        'yesterday_count': yesterday_count,
+        'source_distribution': source_distribution
+    }
     
     # 写入markdown文件
     markdown_file = os.path.join(archive_date_dir, f'Daily_{current_date}.md')
@@ -1413,7 +1816,9 @@ def generate_daily_report():
             date=current_date,
             count=len(vulnerabilities),
             update_time=current_time,
-            articles=vuln_list
+            articles=vuln_list,
+            yesterday_count=yesterday_count,
+            source_distribution=source_distribution
         )
         
         # 写入HTML文件
@@ -1435,6 +1840,123 @@ def generate_daily_report():
     
     return markdown_file, markdown_content
 
+# 生成周报
+def generate_weekly_report():
+    """
+    生成周报，包括Markdown和HTML格式
+    周报包含本周内所有日报的链接
+    """
+    log_info("开始生成周报...")
+    
+    # 获取当前日期
+    current_date = datetime.now().strftime('%Y-%m-%d')
+    current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    
+    # 计算本周日期范围
+    today = datetime.now()
+    # 计算本周一的日期
+    monday = today - timedelta(days=today.weekday())
+    monday_str = monday.strftime('%Y-%m-%d')
+    # 计算本周日的日期
+    sunday = monday + timedelta(days=6)
+    sunday_str = sunday.strftime('%Y-%m-%d')
+    
+    # 创建目录结构
+    weekly_dir_name = f'Weekly_{current_date}'
+    archive_weekly_dir = os.path.join(ARCHIVE_DIR, weekly_dir_name)
+    os.makedirs(archive_weekly_dir, exist_ok=True)
+    
+    # 获取本周内的所有日报信息
+    weekly_daily_reports = []
+    total_vulns = 0
+    
+    # 遍历本周的每一天
+    for i in range(7):
+        # 计算当天日期
+        day_date = monday + timedelta(days=i)
+        day_date_str = day_date.strftime('%Y-%m-%d')
+        
+        # 检查当天是否有日报
+        day_dir = os.path.join(ARCHIVE_DIR, day_date_str)
+        if os.path.exists(day_dir):
+            # 检查当天是否有HTML日报
+            html_file = os.path.join(day_dir, f'Daily_{day_date_str}.html')
+            if os.path.exists(html_file):
+                # 计算当天的漏洞数量
+                conn = sqlite3.connect('data.db')
+                cursor = conn.cursor()
+                cursor.execute("SELECT COUNT(*) FROM vulnerabilities WHERE time = ?", (day_date_str,))
+                day_vuln_count = cursor.fetchone()[0]
+                conn.close()
+                
+                total_vulns += day_vuln_count
+                
+                # 计算相对路径
+                rel_html_path = os.path.relpath(html_file, ARCHIVE_DIR)
+                
+                # 添加到日报列表
+                weekly_daily_reports.append({
+                    'date': day_date_str,
+                    'vuln_count': day_vuln_count,
+                    'html_path': rel_html_path
+                })
+    
+    # 生成markdown内容
+    markdown_content = f"# 威胁情报周报 {monday_str} - {sunday_str}\n\n"
+    markdown_content += f"本周共收集到 {total_vulns} 个漏洞\n"
+    markdown_content += f"最后更新时间：{current_time}\n\n"
+    markdown_content += "## 本周威胁情报\n\n"
+    
+    for report in weekly_daily_reports:
+        markdown_content += f"- [{report['date']}] 共 {report['vuln_count']} 个漏洞 → [{report['date']}日报](./{report['html_path']})\n"
+    
+    # 写入markdown文件
+    markdown_file = os.path.join(archive_weekly_dir, f'Weekly_{current_date}.md')
+    is_update = os.path.exists(markdown_file)
+    with open(markdown_file, 'w', encoding='utf-8') as f:
+        f.write(markdown_content)
+    
+    if is_update:
+        log_info(f"Markdown周报已更新：{markdown_file}")
+    else:
+        log_info(f"Markdown周报已生成：{markdown_file}")
+    
+    # 生成HTML内容
+    try:
+        # 读取HTML模板
+        template_path = os.path.join(STATIC_DIR, 'template.html')
+        with open(template_path, 'r', encoding='utf-8') as f:
+            template_content = f.read()
+        
+        # 渲染HTML模板
+        from jinja2 import Template
+        template = Template(template_content)
+        html_content = template.render(
+            date=f"{monday_str} - {sunday_str}",
+            count=total_vulns,
+            update_time=current_time,
+            articles=weekly_daily_reports
+        )
+        
+        # 写入HTML文件
+        html_file = os.path.join(archive_weekly_dir, f'Weekly_{current_date}.html')
+        with open(html_file, 'w', encoding='utf-8') as f:
+            f.write(html_content)
+        
+        if is_update:
+            log_info(f"HTML周报已更新：{html_file}")
+        else:
+            log_info(f"HTML周报已生成：{html_file}")
+        
+        # 更新index.html
+        update_index_html()
+        
+    except Exception as e:
+        log_error(f"生成HTML周报失败：{str(e)}")
+        log_error(traceback.format_exc())
+    
+    return markdown_file, markdown_content
+
 # 更新index.html
 def update_index_html():
     """
@@ -1443,157 +1965,384 @@ def update_index_html():
     log_info("开始更新index.html...")
     
     # 创建index.html模板
-    index_template = '''
-<!DOCTYPE html>
+    index_template = '''<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>威胁情报</title>
     <style>
+        /* 全局样式重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        /* 现代化配色方案 */
+        :root {
+            --primary-color: #4285f4;
+            --secondary-color: #34a853;
+            --accent-color: #fbbc05;
+            --danger-color: #ea4335;
+            --text-primary: #202124;
+            --text-secondary: #5f6368;
+            --text-muted: #9aa0a6;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-tertiary: #f1f3f4;
+            --border-color: #e0e0e0;
+            --shadow-sm: 0 1px 2px 0 rgba(60, 64, 67, 0.3);
+            --shadow-md: 0 1px 3px 0 rgba(60, 64, 67, 0.3), 0 4px 8px 3px rgba(60, 64, 67, 0.15);
+            --border-radius: 8px;
+            --transition: all 0.2s ease-in-out;
+        }
+        
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             line-height: 1.6;
-            color: #333;
+            color: var(--text-primary);
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #f5f5f5;
+            background-color: var(--bg-secondary);
+            font-size: 16px;
         }
+        
+        /* 标题样式 */
         header {
-            background-color: #4285f4;
+            background: linear-gradient(135deg, var(--primary-color), #3367d6);
             color: white;
-            padding: 20px;
-            border-radius: 8px;
+            padding: 30px;
+            border-radius: var(--border-radius);
             text-align: center;
             margin-bottom: 30px;
+            box-shadow: var(--shadow-md);
         }
+        
         h1 {
-            margin: 0;
-            font-size: 2rem;
+            margin: 0 0 10px 0;
+            font-size: 2.2rem;
+            font-weight: 700;
         }
+        
         h2 {
             font-size: 1.5rem;
-            margin-bottom: 20px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            font-weight: 600;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--bg-tertiary);
         }
+        
+        /* 报告列表 */
         .report-list {
             list-style: none;
             padding: 0;
         }
+        
         .report-item {
-            background-color: white;
+            background-color: var(--bg-primary);
             padding: 20px;
             margin-bottom: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
         }
+        
+        .report-item:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+        
         .report-link {
-            color: #4285f4;
+            color: var(--primary-color);
             text-decoration: none;
             font-size: 1.2rem;
-            font-weight: bold;
+            font-weight: 600;
+            transition: var(--transition);
+            flex: 1;
+            min-width: 200px;
         }
+        
         .report-link:hover {
             text-decoration: underline;
+            color: #3367d6;
         }
+        
         .report-info {
-            color: #666;
-            font-size: 0.9rem;
-            margin-top: 5px;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-shrink: 0;
         }
+        
+        .report-count {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        /* 统计信息 */
+        .stats {
+            background-color: var(--bg-primary);
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .stat-item {
+            display: inline-block;
+            margin-right: 30px;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-right: 8px;
+        }
+        
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            header {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .report-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .report-link {
+                width: 100%;
+            }
+        }
+        
+        /* 页脚样式 */
         footer {
             text-align: center;
             margin-top: 50px;
-            color: #666;
+            padding: 20px;
+            color: var(--text-muted);
             font-size: 0.9rem;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        /* 空状态 */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+        }
+        
+        .empty-state h3 {
+            color: var(--text-secondary);
+            margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>威胁情报</h1>
-        <div>每日威胁情报汇总</div>
+        <h1>🔒 威胁情报</h1>
+        <div style="font-size: 1.1rem; opacity: 0.9;">威胁情报汇总</div>
     </header>
     
     <main>
-        <h2>情报列表</h2>
-        <ul class="report-list">
-            {% for report in reports %}
-            <li class="report-item">
-                <a href="{{ report.path }}" class="report-link" target="_blank">{{ report.date }}</a>
-                <div class="report-info">共 {{ report.count }} 个漏洞</div>
-            </li>
-            {% endfor %}
-        </ul>
+        <h2>📊 统计信息</h2>
+        <div class="stats">
+            <div class="stat-item">
+                <span class="stat-label">周报数：</span>
+                <span class="stat-value">{{ weekly_reports|length }}</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">日报数：</span>
+                <span class="stat-value">{{ daily_reports|length }}</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">总报告数：</span>
+                <span class="stat-value">{{ weekly_reports|length + daily_reports|length }}</span>
+            </div>
+        </div>
+        
+        <h2>📋 每周威胁情报</h2>
+        {% if weekly_reports %}
+            <ul class="report-list">
+                {% for report in weekly_reports %}
+                <li class="report-item">
+                    <a href="{{ report.path }}" class="report-link" target="_blank">{{ report.date }}</a>
+                    <div class="report-info">
+                        <span>📈 <strong class="report-count">{{ report.count }}</strong> 个漏洞</span>
+                        <a href="{{ report.path }}" style="color: var(--primary-color); text-decoration: none; font-size: 0.85rem;" target="_blank">查看详情</a>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <div class="empty-state">
+                <h3>暂无每周威胁情报</h3>
+                <p>还没有生成任何每周威胁情报，请稍后再查看。</p>
+            </div>
+        {% endif %}
+        
+        <h2>📋 每日威胁情报</h2>
+        {% if daily_reports %}
+            <ul class="report-list">
+                {% for report in daily_reports %}
+                <li class="report-item">
+                    <a href="{{ report.path }}" class="report-link" target="_blank">{{ report.date }}</a>
+                    <div class="report-info">
+                        <span>📈 <strong class="report-count">{{ report.count }}</strong> 个漏洞</span>
+                        <a href="{{ report.path }}" style="color: var(--primary-color); text-decoration: none; font-size: 0.85rem;" target="_blank">查看详情</a>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <div class="empty-state">
+                <h3>暂无每日威胁情报</h3>
+                <p>还没有生成任何每日威胁情报，请稍后再查看。</p>
+            </div>
+        {% endif %}
     </main>
     
     <footer>
-        <p>Generated by CVE Monitor</p>
+        <p>Power By 东方隐侠安全团队·Anonymous@ <a href="https://www.dfyxsec.com/" target="_blank" style="color: var(--primary-color); text-decoration: none;">隐侠安全客栈</a></p>
     </footer>
 </body>
 </html>
     '''
     
-    # 获取所有已生成的日报
-    reports = []
+    # 获取所有已生成的报告，区分周报和日报
+    weekly_reports = []
+    daily_reports = []
     
-    # 遍历archive目录下的所有日期目录
+    # 遍历archive目录下的所有目录
     if os.path.exists(ARCHIVE_DIR):
-        for date_dir in sorted(os.listdir(ARCHIVE_DIR), reverse=True):
-            date_path = os.path.join(ARCHIVE_DIR, date_dir)
-            if os.path.isdir(date_path):
-                # 检查该日期目录下是否存在HTML文件
-                html_file = os.path.join(date_path, f'Daily_{date_dir}.html')
-                if os.path.exists(html_file):
-                    # 尝试获取漏洞数量
-                    count = 0
-                    md_file = os.path.join(date_path, f'Daily_{date_dir}.md')
-                    if os.path.exists(md_file):
-                        with open(md_file, 'r', encoding='utf-8') as f:
-                            content = f.read()
-                            # 从markdown文件中提取漏洞数量
-                            import re
-                            match = re.search(r'共收集到 (\d+) 个漏洞', content)
-                            if match:
-                                count = match.group(1)
-                    
-                    reports.append({
-                        'date': date_dir,
-                        'path': os.path.relpath(html_file, PRJ_DIR),
-                        'count': count
-                    })
+        for report_dir in sorted(os.listdir(ARCHIVE_DIR), reverse=True):
+            report_path = os.path.join(ARCHIVE_DIR, report_dir)
+            if os.path.isdir(report_path):
+                if report_dir.startswith('Weekly_'):
+                    # 处理周报
+                    # 从目录名中提取日期
+                    weekly_date = report_dir.replace('Weekly_', '')
+                    html_file = os.path.join(report_path, f'Weekly_{weekly_date}.html')
+                    if os.path.exists(html_file):
+                        # 尝试获取漏洞数量
+                        count = 0
+                        md_file = os.path.join(report_path, f'Weekly_{weekly_date}.md')
+                        if os.path.exists(md_file):
+                            with open(md_file, 'r', encoding='utf-8') as f:
+                                content = f.read()
+                                # 从markdown文件中提取漏洞数量
+                                import re
+                                match = re.search(r'本周共收集到 (\d+) 个漏洞', content)
+                                if match:
+                                    count = match.group(1)
+                        
+                        # 计算相对于static目录的路径，使用正斜杠
+                        rel_path = os.path.relpath(html_file, os.path.join(PRJ_DIR, 'static'))
+                        # 将Windows反斜杠转换为正斜杠
+                        rel_path = rel_path.replace('\\', '/')
+                        # 如果路径以'../'开头，移除它以确保链接正确
+                        if rel_path.startswith('../'):
+                            rel_path = rel_path[3:]
+                        weekly_reports.append({
+                            'date': weekly_date,
+                            'path': rel_path,
+                            'count': count
+                        })
+                else:
+                    # 处理日报
+                    # 检查该日期目录下是否存在HTML文件
+                    html_file = os.path.join(report_path, f'Daily_{report_dir}.html')
+                    if os.path.exists(html_file):
+                        # 尝试获取漏洞数量
+                        count = 0
+                        md_file = os.path.join(report_path, f'Daily_{report_dir}.md')
+                        if os.path.exists(md_file):
+                            with open(md_file, 'r', encoding='utf-8') as f:
+                                content = f.read()
+                                # 从markdown文件中提取漏洞数量
+                                import re
+                                match = re.search(r'共收集到 (\d+) 个漏洞', content)
+                                if match:
+                                    count = match.group(1)
+                        
+                        # 计算相对于static目录的路径，使用正斜杠
+                    rel_path = os.path.relpath(html_file, os.path.join(PRJ_DIR, 'static'))
+                    # 将Windows反斜杠转换为正斜杠
+                    rel_path = rel_path.replace('\\', '/')
+                    # 如果路径以'../'开头，移除它以确保链接正确
+                    if rel_path.startswith('../'):
+                        rel_path = rel_path[3:]
+                        daily_reports.append({
+                            'date': report_dir,
+                            'path': rel_path,
+                            'count': count
+                        })
     
     # 渲染index.html
     from jinja2 import Template
     template = Template(index_template)
-    html_content = template.render(reports=reports)
+    html_content = template.render(weekly_reports=weekly_reports, daily_reports=daily_reports)
     
     # 创建static目录
     static_dir = os.path.join(PRJ_DIR, 'static')
     os.makedirs(static_dir, exist_ok=True)
     
-    # 写入index.html文件
-    index_file = os.path.join(static_dir, 'index.html')
+    # 写入index.html文件到根目录
+    index_file = os.path.join(PRJ_DIR, 'index.html')
     with open(index_file, 'w', encoding='utf-8') as f:
         f.write(html_content)
     
-    log_info(f"index.html已更新：{index_file}")
+    log_info(f"index.html已更新到根目录：{index_file}")
 
 # 生成WordPress RSS Feed
-def generate_wordpress_rss():
+def generate_wordpress_rss(is_weekly=False):
     """
     生成WordPress兼容的RSS Feed
+    :param is_weekly: 是否为周报模式，True表示生成包含所有漏洞的RSS，False表示只生成当天的
     """
     log_info("开始生成WordPress RSS Feed...")
     
     # 获取当前日期
     current_date = datetime.now().strftime('%Y-%m-%d')
     
-    # 从数据库中获取当天的所有漏洞
+    # 从数据库中获取漏洞数据
     conn = sqlite3.connect('data.db')
     cursor = conn.cursor()
-    cursor.execute("SELECT id, title, time, source, detail_url, cve_ids FROM vulnerabilities WHERE time = ? ORDER BY time DESC", (current_date,))
-    vulnerabilities = cursor.fetchall()
+    
+    if is_weekly:
+        # 生成周报时，获取所有漏洞数据
+        cursor.execute("SELECT id, title, time, source, detail_url, cve_ids FROM vulnerabilities ORDER BY time DESC")
+        vulnerabilities = cursor.fetchall()
+    else:
+        # 生成日报时，只获取当天的漏洞数据
+        cursor.execute("SELECT id, title, time, source, detail_url, cve_ids FROM vulnerabilities WHERE time = ? ORDER BY time DESC", (current_date,))
+        vulnerabilities = cursor.fetchall()
     conn.close()
     
     # 生成RSS内容
@@ -1602,7 +2351,7 @@ def generate_wordpress_rss():
     <channel>
         <title>威胁情报</title>
         <link>https://github.com/adminlove520/CVE_pusher</link>
-        <description>每日威胁情报汇总</description>
+        <description>威胁情报汇总 - 包含每日和每周威胁情报</description>
         <language>zh-CN</language>
         <lastBuildDate>{}</lastBuildDate>
 '''.format(datetime.now().strftime('%a, %d %b %Y %H:%M:%S GMT'))
@@ -1653,9 +2402,10 @@ if __name__ == '__main__':
     import argparse
     
     # 解析命令行参数
-    parser = argparse.ArgumentParser(description='CVE漏洞监控脚本')
+    parser = argparse.ArgumentParser(description='CVE威胁情报监控')
     parser.add_argument('--once', action='store_true', help='只执行一次，适合GitHub Action运行')
     parser.add_argument('--daily-report', action='store_true', help='生成日报模式，只生成日报不推送')
+    parser.add_argument('--weekly-report', action='store_true', help='生成周报模式，生成周报并推送')
     parser.add_argument('--no-push', action='store_true', help='关闭推送功能，只收集数据')
     args = parser.parse_args()
     
@@ -1678,6 +2428,8 @@ if __name__ == '__main__':
         tenable = Tenable()
         ms_crawler = MicrosoftSecurityCrawler()
         okcve_crawler = OKCVECrawler()
+        qianxin_crawler = QianxinCrawler()
+        threatbook_crawler = ThreatBookCrawler()
         
         # 记录程序启动时间，用于控制最大运行时长
         program_start_time = time.time()
@@ -1710,55 +2462,109 @@ if __name__ == '__main__':
                 log_info(f"开始新一轮漏洞获取...当前日期: {current_date}")
                 all_cves = []
                 
+                # 加载数据源配置
+                datasource_config = load_datasource_config()
+                log_info(f"数据源配置: {datasource_config}")
+                
                 # 获取各个平台的漏洞信息（每个平台的get方法已经确保只返回数据库中不存在的新漏洞）
-                try:
-                    oscs1024_vulnerabilities = oscs1024.vulnerabilities()
-                    if oscs1024_vulnerabilities:
-                        all_cves.extend(oscs1024_vulnerabilities)
-                        log_info(f"从OSCS1024获取到 {len(oscs1024_vulnerabilities)} 条新漏洞")
-                except Exception as e:
-                    log_error(f"从OSCS1024获取漏洞失败: {e}")
+                # OSCS1024
+                if datasource_config.get('oscs1024', 1):
+                    try:
+                        oscs1024_vulnerabilities = oscs1024.vulnerabilities()
+                        if oscs1024_vulnerabilities:
+                            all_cves.extend(oscs1024_vulnerabilities)
+                            log_info(f"从OSCS1024获取到 {len(oscs1024_vulnerabilities)} 条新漏洞")
+                    except Exception as e:
+                        log_error(f"从OSCS1024获取漏洞失败: {e}")
+                else:
+                    log_info("OSCS1024数据源已禁用，跳过")
                 
                 # 在请求之间添加短暂休眠，防止请求过于频繁
                 time.sleep(2)
                 
-                try:
-                    antiycloud_cves = antiycloud.cves()
-                    if antiycloud_cves:
-                        all_cves.extend(antiycloud_cves)
-                        log_info(f"从安天获取到 {len(antiycloud_cves)} 条新漏洞")
-                except Exception as e:
-                    log_error(f"从安天获取漏洞失败: {e}")
+                # 安天
+                if datasource_config.get('antiycloud', 1):
+                    try:
+                        antiycloud_cves = antiycloud.cves()
+                        if antiycloud_cves:
+                            all_cves.extend(antiycloud_cves)
+                            log_info(f"从安天获取到 {len(antiycloud_cves)} 条新漏洞")
+                    except Exception as e:
+                        log_error(f"从安天获取漏洞失败: {e}")
+                else:
+                    log_info("安天数据源已禁用，跳过")
                 
                 time.sleep(2)
                 
-                try:
-                    tenable_cves = tenable.cves()
-                    if tenable_cves:
-                        all_cves.extend(tenable_cves)
-                        log_info(f"从Tenable获取到 {len(tenable_cves)} 条新漏洞")
-                except Exception as e:
-                    log_error(f"从Tenable获取漏洞失败: {e}")
+                # Tenable
+                if datasource_config.get('tenable', 1):
+                    try:
+                        tenable_cves = tenable.cves()
+                        if tenable_cves:
+                            all_cves.extend(tenable_cves)
+                            log_info(f"从Tenable获取到 {len(tenable_cves)} 条新漏洞")
+                    except Exception as e:
+                        log_error(f"从Tenable获取漏洞失败: {e}")
+                else:
+                    log_info("Tenable数据源已禁用，跳过")
                 
                 time.sleep(2)
                 
-                try:
-                    ms_cves = ms_crawler.get_cves()
-                    if ms_cves:
-                        all_cves.extend(ms_cves)
-                        log_info(f"从微软安全响应中心获取到 {len(ms_cves)} 条新漏洞")
-                except Exception as e:
-                    log_error(f"从微软安全响应中心获取漏洞失败: {e}")
+                # 微软安全响应中心
+                if datasource_config.get('microsoft', 1):
+                    try:
+                        ms_cves = ms_crawler.get_cves()
+                        if ms_cves:
+                            all_cves.extend(ms_cves)
+                            log_info(f"从微软安全响应中心获取到 {len(ms_cves)} 条新漏洞")
+                    except Exception as e:
+                        log_error(f"从微软安全响应中心获取漏洞失败: {e}")
+                else:
+                    log_info("微软安全响应中心数据源已禁用，跳过")
                 
                 time.sleep(2)
                 
-                try:
-                    okcve_cves = okcve_crawler.get_cves()
-                    if okcve_cves:
-                        all_cves.extend(okcve_cves)
-                        log_info(f"从CVE漏洞库获取到 {len(okcve_cves)} 条新漏洞")
-                except Exception as e:
-                    log_error(f"从CVE漏洞库获取漏洞失败: {e}")
+                # CVE漏洞库
+                if datasource_config.get('okcve', 1):
+                    try:
+                        okcve_cves = okcve_crawler.get_cves()
+                        if okcve_cves:
+                            all_cves.extend(okcve_cves)
+                            log_info(f"从CVE漏洞库获取到 {len(okcve_cves)} 条新漏洞")
+                    except Exception as e:
+                        log_error(f"从CVE漏洞库获取漏洞失败: {e}")
+                else:
+                    log_info("CVE漏洞库数据源已禁用，跳过")
+                
+                # 在请求之间添加短暂休眠，防止请求过于频繁
+                time.sleep(2)
+                
+                # 奇安信CERT
+                if datasource_config.get('qianxin', 1):
+                    try:
+                        qianxin_cves = qianxin_crawler.get_cves()
+                        if qianxin_cves:
+                            all_cves.extend(qianxin_cves)
+                            log_info(f"从奇安信CERT获取到 {len(qianxin_cves)} 条新漏洞")
+                    except Exception as e:
+                        log_error(f"从奇安信CERT获取漏洞失败: {e}")
+                else:
+                    log_info("奇安信CERT数据源已禁用，跳过")
+                
+                # 在请求之间添加短暂休眠，防止请求过于频繁
+                time.sleep(2)
+                
+                # 微步
+                if datasource_config.get('threatbook', 1):
+                    try:
+                        threatbook_cves = threatbook_crawler.get_cves()
+                        if threatbook_cves:
+                            all_cves.extend(threatbook_cves)
+                            log_info(f"从微步获取到 {len(threatbook_cves)} 条新漏洞")
+                    except Exception as e:
+                        log_error(f"从微步获取漏洞失败: {e}")
+                else:
+                    log_info("微步数据源已禁用，跳过")
                 
                 log_info(f"本次总共获取到 {len(all_cves)} 条新漏洞信息")
                 
@@ -1808,15 +2614,64 @@ if __name__ == '__main__':
                 # 日报模式或单次执行模式下生成日报
                 if args.daily_report or (args.once and os.environ.get('DAILY_REPORT_SWITCH', 'ON') == 'ON'):
                     # 生成日报
-                    generate_daily_report()
+                    markdown_file, markdown_content = generate_daily_report()
                     # 生成WordPress RSS Feed
                     generate_wordpress_rss()
+                    
+                    # 不再推送日报，仅存储
+                    log_info("日报已生成并存储，跳过推送")
+                
+                # 周报模式
+                if args.weekly_report:
+                    # 生成周报
+                    markdown_file, markdown_content = generate_weekly_report()
+                    # 生成WordPress RSS Feed（周报模式）
+                    generate_wordpress_rss(is_weekly=True)
+                    
+                    # 推送周报到Discard（如果配置了）
+                    try:
+                        config = load_config()
+                        if config and config[0] == "discard":
+                            app_name, webhook, send_normal_msg, send_daily_report = config
+                            # 确保send_daily_report是字符串类型
+                            if str(send_daily_report).upper() == 'ON':
+                                # 构造周报推送内容
+                                current_date = datetime.now().strftime('%Y-%m-%d')
+                                text = f"本周漏洞情报 {current_date}"
+                                
+                                # 获取本周漏洞总数
+                                conn = sqlite3.connect('data.db')
+                                cursor = conn.cursor()
+                                # 计算本周一和周日的日期
+                                today = datetime.now()
+                                # 计算本周一的日期
+                                monday = today - timedelta(days=today.weekday())
+                                monday_str = monday.strftime('%Y-%m-%d')
+                                # 计算本周日的日期
+                                sunday = monday + timedelta(days=6)
+                                sunday_str = sunday.strftime('%Y-%m-%d')
+                                # 查询本周内的所有漏洞数量
+                                cursor.execute("SELECT COUNT(*) FROM vulnerabilities WHERE time >= ? AND time <= ?", (monday_str, sunday_str))
+                                vuln_count = cursor.fetchone()[0]
+                                conn.close()
+                                
+                                msg = f"本周共收集到 {vuln_count} 个漏洞"
+                                html_file = os.path.relpath(os.path.join(ARCHIVE_DIR, f'Weekly_{current_date}', f'Weekly_{current_date}.html'), PRJ_DIR)
+                                
+                                # 推送周报到Discard
+                                discard(text, msg, webhook, is_daily_report=True, html_file=html_file, markdown_content=markdown_content)
+                                log_info("Discard周报推送成功")
+                            else:
+                                log_info("Discard周报推送已禁用，跳过推送")
+                    except Exception as e:
+                        log_error(f"推送Discard周报失败：{e}")
+                        log_error(traceback.format_exc())
                 
                 log_info("本轮漏洞获取完成，等待下一轮...")
                 
-                # 如果是单次执行或日报模式，直接退出
-                if args.once or args.daily_report:
-                    log_info("单次执行或日报模式完成，退出程序")
+                # 如果是单次执行、日报模式或周报模式，直接退出
+                if args.once or args.daily_report or args.weekly_report:
+                    log_info("单次执行、日报模式或周报模式完成，退出程序")
                     break
                 
                 # 按照配置的检查间隔休眠
@@ -1929,147 +2784,7 @@ def generate_daily_report():
     return markdown_file, markdown_content
 
 # 更新index.html
-def update_index_html():
-    """
-    更新index.html文件，显示所有日报列表
-    """
-    log_info("开始更新index.html...")
-    
-    # 创建index.html模板
-    index_template = '''
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>威胁情报</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
-        header {
-            background-color: #4285f4;
-            color: white;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        h1 {
-            margin: 0;
-            font-size: 2rem;
-        }
-        h2 {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-        }
-        .report-list {
-            list-style: none;
-            padding: 0;
-        }
-        .report-item {
-            background-color: white;
-            padding: 20px;
-            margin-bottom: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        .report-link {
-            color: #4285f4;
-            text-decoration: none;
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
-        .report-link:hover {
-            text-decoration: underline;
-        }
-        .report-info {
-            color: #666;
-            font-size: 0.9rem;
-            margin-top: 5px;
-        }
-        footer {
-            text-align: center;
-            margin-top: 50px;
-            color: #666;
-            font-size: 0.9rem;
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <h1>威胁情报</h1>
-        <div>每日威胁情报汇总</div>
-    </header>
-    
-    <main>
-        <h2>情报列表</h2>
-        <ul class="report-list">
-            {% for report in reports %}
-            <li class="report-item">
-                <a href="{{ report.path }}" class="report-link" target="_blank">{{ report.date }}</a>
-                <div class="report-info">共 {{ report.count }} 个漏洞</div>
-            </li>
-            {% endfor %}
-        </ul>
-    </main>
-    
-    <footer>
-        <p>Generated by CVE Monitor</p>
-    </footer>
-</body>
-</html>
-    '''
-    
-    # 获取所有已生成的日报
-    reports = []
-    
-    # 遍历archive目录下的所有日期目录
-    if os.path.exists(ARCHIVE_DIR):
-        for date_dir in sorted(os.listdir(ARCHIVE_DIR), reverse=True):
-            date_path = os.path.join(ARCHIVE_DIR, date_dir)
-            if os.path.isdir(date_path):
-                # 检查该日期目录下是否存在HTML文件
-                html_file = os.path.join(date_path, f'Daily_{date_dir}.html')
-                if os.path.exists(html_file):
-                    # 尝试获取漏洞数量
-                    count = 0
-                    md_file = os.path.join(date_path, f'Daily_{date_dir}.md')
-                    if os.path.exists(md_file):
-                        with open(md_file, 'r', encoding='utf-8') as f:
-                            content = f.read()
-                            # 从markdown文件中提取漏洞数量
-                            import re
-                            match = re.search(r'共收集到 (\d+) 个漏洞', content)
-                            if match:
-                                count = match.group(1)
-                    
-                    reports.append({
-                        'date': date_dir,
-                        'path': os.path.relpath(html_file, PRJ_DIR),
-                        'count': count
-                    })
-    
-    # 渲染index.html
-    from jinja2 import Template
-    template = Template(index_template)
-    html_content = template.render(reports=reports)
-    
-    # 写入index.html文件
-    index_file = os.path.join(STATIC_DIR, 'index.html')
-    with open(index_file, 'w', encoding='utf-8') as f:
-        f.write(html_content)
-    
-    log_info(f"index.html已更新：{index_file}")
 
-# 生成WordPress RSS Feed
-def generate_wordpress_rss():
     """
     生成WordPress兼容的RSS Feed
     """

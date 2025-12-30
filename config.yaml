@@ -1,6 +1,6 @@
 all_config:
  dingding:
-   - enable: 1
+   - enable: 0
    - webhook: https://oapi.dingtalk.com/robot/send?access_token=
    - secretKey: 
    - app_name: dingding
@@ -13,8 +13,22 @@ all_config:
    - token: 123
    - group_id: 123
    - app_name: tgbot
- translate:
+ discard:
    - enable: 1
+   - webhook: https://discord.com/api/webhooks/
+   - app_name: discard
+   - send_normal_msg: ON
+   - send_daily_report: ON
+ datasources:
+   - oscs1024: 1
+   - antiycloud: 1
+   - tenable: 1
+   - microsoft: 1
+   - okcve: 1
+   - qianxin: 1
+   - threatbook: 1
+ translate:
+   - enable: 0
    - provider: google
    - api_key: ""  # 如果使用googletrans库则不需要填写
    - source_lang: auto

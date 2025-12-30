@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>威胁情报 - {{ date }}</title>
+    <title>威胁情报 - 2025-12-29 - 2026-01-04</title>
     <style>
         /* 全局样式重置 */
         * {
@@ -132,11 +132,8 @@
             color: var(--primary-color);
             text-decoration: none;
             font-weight: 600;
-            font-size: 1.3rem;
+            font-size: 1.15rem;
             transition: var(--transition);
-            text-align: center;
-            display: block;
-            margin-bottom: 15px;
         }
         
         .vuln-title:hover {
@@ -148,29 +145,25 @@
         .vuln-info {
             margin-top: 15px;
             color: var(--text-secondary);
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
         }
         
         .vuln-meta {
             display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
         }
         
         .vuln-meta strong {
             color: var(--text-primary);
             font-weight: 500;
-            min-width: 80px;
-            flex-shrink: 0;
+            min-width: 60px;
         }
         
         .vuln-meta span {
             word-break: break-word;
-            flex: 1;
-            min-width: 200px;
         }
         
         /* 标签样式 */
@@ -286,67 +279,58 @@
 <body>
     <header>
         <h1>🔒 威胁情报</h1>
-        <div style="font-size: 1.1rem; margin: 10px 0;">{{ date }}</div>
-        <div style="font-size: 0.9rem; opacity: 0.9;">最后更新时间：{{ update_time }}</div>
+        <div style="font-size: 1.1rem; margin: 10px 0;">2025-12-29 - 2026-01-04</div>
+        <div style="font-size: 0.9rem; opacity: 0.9;">最后更新时间：2025-12-30 17:45:49</div>
     </header>
     
     <main>
         <div class="summary">
             <div class="summary-item">
-                <h2 style="text-align: center; font-weight: bold; margin-bottom: 15px;">威胁情报前瞻</h2>
+                <h2>威胁情报前瞻</h2>
                 <div style="margin-top: 10px; color: var(--text-secondary); line-height: 1.8;">
-                    <p>📊 <strong>今日漏洞总数：</strong>{{ count }}</p>
-                    <p>📈 <strong>与昨日对比：</strong>{% if yesterday_count is defined %}{% if count > yesterday_count %}增加了 {{ count - yesterday_count }} 个漏洞{% elif count < yesterday_count %}减少了 {{ yesterday_count - count }} 个漏洞{% else %}漏洞数量持平{% endif %}{% else %}数据不足{% endif %}</p>
+                    <p>📊 <strong>今日漏洞总数：</strong>17</p>
+                    <p>📈 <strong>与昨日对比：</strong>数据不足</p>
                     
-                    {% if source_distribution is defined %}
-                    <p>🔍 <strong>漏洞来源分布：</strong>
-                        {% set total = count %}
-                        {% if total > 0 %}
-                            {% for source, num in source_distribution.items() %}
-                                {% if num > 0 %}
-                                    {{ source }}({{ num }}个, {{ "%.1f" | format(num/total*100) }}%), 
-                                {% endif %}
-                            {% endfor %}
-                        {% endif %}
+                    
+                    
+                    
+                    
+                    <p>🔝 <strong>主要影响领域：</strong>网络设备、操作系统、Web应用、数据库、云服务</p>
+                    <p>💡 <strong>风险建议：</strong>
+                        
+                        定期更新系统和应用，加强网络安全监控
                     </p>
-                    {% endif %}
-                    
-
+                    <p>🔄 <strong>数据质量：</strong>优先使用返回字段完整的数据源，包括奇安信CERT、安天、Microsoft等</p>
                 </div>
             </div>
         </div>
         
         <h2>📋 漏洞详情</h2>
-        {% if articles %}
-            {% for article in articles %}
+        
+            
             <div class="vuln-item">
-                <h3><a href="{{ article.link }}" class="vuln-title" target="_blank">{{ article.title }}</a></h3>
+                <h3><a href="" class="vuln-title" target="_blank"></a></h3>
                 <div class="vuln-info">
                     <div class="vuln-meta">
                         <strong>编号：</strong>
-                        <span>{{ article.cve_ids }}</span>
+                        <span></span>
                     </div>
                     <div class="vuln-meta">
                         <strong>来源：</strong>
-                        <span>{{ article.source }}</span>
+                        <span></span>
                     </div>
                     <div class="vuln-meta">
                         <strong>时间：</strong>
-                        <span>{{ article.time }}</span>
+                        <span></span>
                     </div>
                     <div class="vuln-meta">
                         <strong>详情：</strong>
-                        <a href="{{ article.link }}" class="vuln-link" target="_blank">{{ article.link }}</a>
+                        <a href="" class="vuln-link" target="_blank"></a>
                     </div>
                 </div>
             </div>
-            {% endfor %}
-        {% else %}
-            <div class="empty-state">
-                <h3>暂无漏洞信息</h3>
-                <p>今天还没有收集到新的漏洞信息，请稍后再查看。</p>
-            </div>
-        {% endif %}
+            
+        
     </main>
     
     <footer>
