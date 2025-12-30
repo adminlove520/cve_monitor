@@ -1689,24 +1689,44 @@ def discard(text, msg, webhook, is_daily_report=False, html_file=None, markdown_
         
         response = requests.post(webhook, json=data, headers=headers, timeout=10)
         
-        # 只检查状态码，不依赖JSON解析，避免JSONDecodeError
+        # 处理不同的响应情况
         if response.status_code in [200, 204]:
-            log_info(f"Discard推送成功，状态码: {response.status_code}")
-            return True
+            # 成功状态码
+            if response.status_code == 204:
+                # 204 No Content - 没有响应体，直接返回成功
+                log_info(f"Discard推送成功，状态码: {response.status_code}")
+                return True
+            else:
+                # 200 OK - 可能有响应体，尝试解析
+                try:
+                    response_text = response.text
+                    if response_text:
+                        # 只有当响应体不为空时才尝试解析JSON
+                        json_response = response.json()
+                        if isinstance(json_response, dict):
+                            if json_response.get('ok') or 'id' in json_response:  # Discord Webhook返回id表示成功
+                                log_info(f"Discard推送成功，状态码: {response.status_code}，响应: {json_response}")
+                                return True
+                            else:
+                                log_warning(f"Discard推送返回非预期JSON: {json_response}")
+                                return True  # 状态码200，即使JSON内容非预期也视为成功
+                        else:
+                            log_warning(f"Discard推送返回非JSON响应: {response_text}")
+                            return True  # 状态码200，即使非JSON也视为成功
+                    else:
+                        # 响应体为空，返回成功
+                        log_info(f"Discard推送成功，状态码: {response.status_code}，响应体为空")
+                        return True
+                except requests.exceptions.JSONDecodeError:
+                    # JSON解析失败，但状态码200，视为成功
+                    log_info(f"Discard推送成功，状态码: {response.status_code}，响应体非JSON格式")
+                    log_debug(f"响应内容: {response.text}")
+                    return True
         else:
+            # 失败状态码
             log_error(f"Discard推送失败，状态码: {response.status_code}")
             log_error(f"响应内容: {response.text}")
             return False
-    except requests.exceptions.JSONDecodeError as je:
-        # 专门处理JSON解码错误，这是最常见的错误
-        status_code = response.status_code if 'response' in locals() else '未知'
-        response_text = response.text if 'response' in locals() else '无响应内容'
-        log_info(f"Discard推送成功（忽略JSON解码错误），状态码: {status_code}")
-        log_info(f"响应内容: {response_text}")
-        # 即使JSON解码失败，如果状态码是200或204，也视为成功
-        if 'response' in locals() and response.status_code in [200, 204]:
-            return True
-        return False
     except Exception as e:
         log_error(f"Discard推送出现异常: {e}")
         log_error(traceback.format_exc())
