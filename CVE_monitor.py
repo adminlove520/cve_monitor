@@ -1149,7 +1149,7 @@ class ThreatBookCrawler(BaseCrawler):
         cve.src = self.NAME_CH()
         
         # 设置URL
-        cve.url = f"https://x.threatbook.com/v5/vuln/detail/{cve_id}" if cve_id else "https://x.threatbook.com/"
+        cve.url = f"https://x.threatbook.com/v5/vul/{cve_id}" if cve_id else "https://x.threatbook.com/"
         cve.detail_url = cve.url  # 确保 detail_url 有值
         cve.source = self.NAME_CH()
         cve.info = it.get("description", "")
@@ -1722,8 +1722,40 @@ def discard(text, msg, webhook, is_daily_report=False, html_file=None, markdown_
                     log_info(f"Discard推送成功，状态码: {response.status_code}，响应体非JSON格式")
                     log_debug(f"响应内容: {response.text}")
                     return True
+        elif response.status_code == 429:
+            # 429 Too Many Requests - 限流处理
+            log_warning(f"Discard推送被限流，状态码: {response.status_code}")
+            try:
+                # 尝试解析限流信息
+                retry_after = 1  # 默认重试等待1秒
+                if response.text:
+                    json_response = response.json()
+                    if isinstance(json_response, dict) and 'retry_after' in json_response:
+                        retry_after = json_response['retry_after']
+                        log_warning(f"Discard限流，需要等待 {retry_after} 秒后重试")
+                
+                # 等待指定时间后重试
+                import time
+                time.sleep(retry_after)
+                
+                # 重新发送请求
+                log_info(f"Discard推送重试，webhook: {webhook[:20]}...")
+                retry_response = requests.post(webhook, json=data, headers=headers, timeout=10)
+                
+                # 再次检查重试结果
+                if retry_response.status_code in [200, 204]:
+                    log_info(f"Discard推送重试成功，状态码: {retry_response.status_code}")
+                    return True
+                else:
+                    log_error(f"Discard推送重试失败，状态码: {retry_response.status_code}")
+                    log_error(f"重试响应内容: {retry_response.text}")
+                    return False
+            except Exception as retry_e:
+                log_error(f"Discard推送重试时出现异常: {retry_e}")
+                log_error(traceback.format_exc())
+                return False
         else:
-            # 失败状态码
+            # 其他失败状态码
             log_error(f"Discard推送失败，状态码: {response.status_code}")
             log_error(f"响应内容: {response.text}")
             return False
