@@ -5,362 +5,467 @@
         <link>https://github.com/adminlove520/CVE_pusher</link>
         <description>威胁情报汇总 - 包含每日和每周威胁情报</description>
         <language>zh-CN</language>
-        <lastBuildDate>Tue, 30 Dec 2025 15:06:20 GMT</lastBuildDate>
+        <lastBuildDate>Fri, 02 Jan 2026 18:09:36 GMT</lastBuildDate>
 
         <item>
-            <title>CVE-2025-15251 漏洞</title>
-            <link>https://www.oscs1024.com/hd/MPS-7q91-kulj</link>
-            <pubDate>Tue, 30 Dec 2025 00:00:00 GMT</pubDate>
-            <guid isPermaLink="false">CVE-2025-15251</guid>
+            <title>CVE-2025-15434 漏洞</title>
+            <link>https://www.oscs1024.com/hd/MPS-0jsz-h5e7</link>
+            <pubDate>Fri, 02 Jan 2026 00:00:00 GMT</pubDate>
+            <guid isPermaLink="false">CVE-2025-15434</guid>
             <description><![CDATA[
-                <h2>CVE-2025-15251 漏洞</h2>
-                <p><strong>编号：</strong>CVE-2025-15251</p>
+                <h2>CVE-2025-15434 漏洞</h2>
+                <p><strong>编号：</strong>CVE-2025-15434</p>
                 <p><strong>来源：</strong>OSCS1024漏洞库</p>
-                <p><strong>时间：</strong>2025-12-30</p>
-                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-7q91-kulj" target="_blank">https://www.oscs1024.com/hd/MPS-7q91-kulj</a></p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-0jsz-h5e7" target="_blank">https://www.oscs1024.com/hd/MPS-0jsz-h5e7</a></p>
             ]]></description>
             <content:encoded><![CDATA[
-                <h2>CVE-2025-15251 漏洞</h2>
-                <p><strong>编号：</strong>CVE-2025-15251</p>
+                <h2>CVE-2025-15434 漏洞</h2>
+                <p><strong>编号：</strong>CVE-2025-15434</p>
                 <p><strong>来源：</strong>OSCS1024漏洞库</p>
-                <p><strong>时间：</strong>2025-12-30</p>
-                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-7q91-kulj" target="_blank">https://www.oscs1024.com/hd/MPS-7q91-kulj</a></p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-0jsz-h5e7" target="_blank">https://www.oscs1024.com/hd/MPS-0jsz-h5e7</a></p>
             ]]></content:encoded>
         </item>
 
         <item>
-            <title>CVE-2025-15249 漏洞</title>
-            <link>https://www.oscs1024.com/hd/MPS-dc0o-1z6v</link>
-            <pubDate>Tue, 30 Dec 2025 00:00:00 GMT</pubDate>
-            <guid isPermaLink="false">CVE-2025-15249</guid>
+            <title>CVE-2025-15432漏洞</title>
+            <link>https://www.oscs1024.com/hd/MPS-4sp6-mlv7</link>
+            <pubDate>Fri, 02 Jan 2026 00:00:00 GMT</pubDate>
+            <guid isPermaLink="false">CVE-2025-15432</guid>
             <description><![CDATA[
-                <h2>CVE-2025-15249 漏洞</h2>
-                <p><strong>编号：</strong>CVE-2025-15249</p>
+                <h2>CVE-2025-15432漏洞</h2>
+                <p><strong>编号：</strong>CVE-2025-15432</p>
                 <p><strong>来源：</strong>OSCS1024漏洞库</p>
-                <p><strong>时间：</strong>2025-12-30</p>
-                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-dc0o-1z6v" target="_blank">https://www.oscs1024.com/hd/MPS-dc0o-1z6v</a></p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-4sp6-mlv7" target="_blank">https://www.oscs1024.com/hd/MPS-4sp6-mlv7</a></p>
             ]]></description>
             <content:encoded><![CDATA[
-                <h2>CVE-2025-15249 漏洞</h2>
-                <p><strong>编号：</strong>CVE-2025-15249</p>
+                <h2>CVE-2025-15432漏洞</h2>
+                <p><strong>编号：</strong>CVE-2025-15432</p>
                 <p><strong>来源：</strong>OSCS1024漏洞库</p>
-                <p><strong>时间：</strong>2025-12-30</p>
-                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-dc0o-1z6v" target="_blank">https://www.oscs1024.com/hd/MPS-dc0o-1z6v</a></p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-4sp6-mlv7" target="_blank">https://www.oscs1024.com/hd/MPS-4sp6-mlv7</a></p>
             ]]></content:encoded>
         </item>
 
         <item>
-            <title>CVE-2025-15250 漏洞</title>
-            <link>https://www.oscs1024.com/hd/MPS-kzbm-ildj</link>
-            <pubDate>Tue, 30 Dec 2025 00:00:00 GMT</pubDate>
-            <guid isPermaLink="false">CVE-2025-15250</guid>
+            <title>CVE-2025-15431漏洞</title>
+            <link>https://www.oscs1024.com/hd/MPS-o2cl-bf9m</link>
+            <pubDate>Fri, 02 Jan 2026 00:00:00 GMT</pubDate>
+            <guid isPermaLink="false">CVE-2025-15431</guid>
             <description><![CDATA[
-                <h2>CVE-2025-15250 漏洞</h2>
-                <p><strong>编号：</strong>CVE-2025-15250</p>
+                <h2>CVE-2025-15431漏洞</h2>
+                <p><strong>编号：</strong>CVE-2025-15431</p>
                 <p><strong>来源：</strong>OSCS1024漏洞库</p>
-                <p><strong>时间：</strong>2025-12-30</p>
-                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-kzbm-ildj" target="_blank">https://www.oscs1024.com/hd/MPS-kzbm-ildj</a></p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-o2cl-bf9m" target="_blank">https://www.oscs1024.com/hd/MPS-o2cl-bf9m</a></p>
             ]]></description>
             <content:encoded><![CDATA[
-                <h2>CVE-2025-15250 漏洞</h2>
-                <p><strong>编号：</strong>CVE-2025-15250</p>
+                <h2>CVE-2025-15431漏洞</h2>
+                <p><strong>编号：</strong>CVE-2025-15431</p>
                 <p><strong>来源：</strong>OSCS1024漏洞库</p>
-                <p><strong>时间：</strong>2025-12-30</p>
-                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-kzbm-ildj" target="_blank">https://www.oscs1024.com/hd/MPS-kzbm-ildj</a></p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-o2cl-bf9m" target="_blank">https://www.oscs1024.com/hd/MPS-o2cl-bf9m</a></p>
             ]]></content:encoded>
         </item>
 
         <item>
-            <title>CVE-2025-15248漏洞</title>
-            <link>https://www.oscs1024.com/hd/MPS-m1lb-i2yh</link>
-            <pubDate>Tue, 30 Dec 2025 00:00:00 GMT</pubDate>
-            <guid isPermaLink="false">CVE-2025-15248</guid>
+            <title>CVE-2025-15429漏洞</title>
+            <link>https://www.oscs1024.com/hd/MPS-53jk-41xy</link>
+            <pubDate>Fri, 02 Jan 2026 00:00:00 GMT</pubDate>
+            <guid isPermaLink="false">CVE-2025-15429</guid>
             <description><![CDATA[
-                <h2>CVE-2025-15248漏洞</h2>
-                <p><strong>编号：</strong>CVE-2025-15248</p>
+                <h2>CVE-2025-15429漏洞</h2>
+                <p><strong>编号：</strong>CVE-2025-15429</p>
                 <p><strong>来源：</strong>OSCS1024漏洞库</p>
-                <p><strong>时间：</strong>2025-12-30</p>
-                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-m1lb-i2yh" target="_blank">https://www.oscs1024.com/hd/MPS-m1lb-i2yh</a></p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-53jk-41xy" target="_blank">https://www.oscs1024.com/hd/MPS-53jk-41xy</a></p>
             ]]></description>
             <content:encoded><![CDATA[
-                <h2>CVE-2025-15248漏洞</h2>
-                <p><strong>编号：</strong>CVE-2025-15248</p>
+                <h2>CVE-2025-15429漏洞</h2>
+                <p><strong>编号：</strong>CVE-2025-15429</p>
                 <p><strong>来源：</strong>OSCS1024漏洞库</p>
-                <p><strong>时间：</strong>2025-12-30</p>
-                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-m1lb-i2yh" target="_blank">https://www.oscs1024.com/hd/MPS-m1lb-i2yh</a></p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-53jk-41xy" target="_blank">https://www.oscs1024.com/hd/MPS-53jk-41xy</a></p>
             ]]></content:encoded>
         </item>
 
         <item>
-            <title>CVE-2025-14426漏洞</title>
-            <link>https://www.oscs1024.com/hd/MPS-w3no-xtqh</link>
-            <pubDate>Tue, 30 Dec 2025 00:00:00 GMT</pubDate>
-            <guid isPermaLink="false">CVE-2025-14426</guid>
+            <title>CVE-2025-15430漏洞</title>
+            <link>https://www.oscs1024.com/hd/MPS-wvkr-fun6</link>
+            <pubDate>Fri, 02 Jan 2026 00:00:00 GMT</pubDate>
+            <guid isPermaLink="false">CVE-2025-15430</guid>
             <description><![CDATA[
-                <h2>CVE-2025-14426漏洞</h2>
-                <p><strong>编号：</strong>CVE-2025-14426</p>
+                <h2>CVE-2025-15430漏洞</h2>
+                <p><strong>编号：</strong>CVE-2025-15430</p>
                 <p><strong>来源：</strong>OSCS1024漏洞库</p>
-                <p><strong>时间：</strong>2025-12-30</p>
-                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-w3no-xtqh" target="_blank">https://www.oscs1024.com/hd/MPS-w3no-xtqh</a></p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-wvkr-fun6" target="_blank">https://www.oscs1024.com/hd/MPS-wvkr-fun6</a></p>
             ]]></description>
             <content:encoded><![CDATA[
-                <h2>CVE-2025-14426漏洞</h2>
-                <p><strong>编号：</strong>CVE-2025-14426</p>
+                <h2>CVE-2025-15430漏洞</h2>
+                <p><strong>编号：</strong>CVE-2025-15430</p>
                 <p><strong>来源：</strong>OSCS1024漏洞库</p>
-                <p><strong>时间：</strong>2025-12-30</p>
-                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-w3no-xtqh" target="_blank">https://www.oscs1024.com/hd/MPS-w3no-xtqh</a></p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-wvkr-fun6" target="_blank">https://www.oscs1024.com/hd/MPS-wvkr-fun6</a></p>
             ]]></content:encoded>
         </item>
 
         <item>
-            <title>CVE-2025-15247 漏洞</title>
-            <link>https://www.oscs1024.com/hd/MPS-xesi-4507</link>
-            <pubDate>Tue, 30 Dec 2025 00:00:00 GMT</pubDate>
-            <guid isPermaLink="false">CVE-2025-15247</guid>
+            <title>CVE-2025-15428漏洞</title>
+            <link>https://www.oscs1024.com/hd/MPS-nvso-d0ic</link>
+            <pubDate>Fri, 02 Jan 2026 00:00:00 GMT</pubDate>
+            <guid isPermaLink="false">CVE-2025-15428</guid>
             <description><![CDATA[
-                <h2>CVE-2025-15247 漏洞</h2>
-                <p><strong>编号：</strong>CVE-2025-15247</p>
+                <h2>CVE-2025-15428漏洞</h2>
+                <p><strong>编号：</strong>CVE-2025-15428</p>
                 <p><strong>来源：</strong>OSCS1024漏洞库</p>
-                <p><strong>时间：</strong>2025-12-30</p>
-                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-xesi-4507" target="_blank">https://www.oscs1024.com/hd/MPS-xesi-4507</a></p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-nvso-d0ic" target="_blank">https://www.oscs1024.com/hd/MPS-nvso-d0ic</a></p>
             ]]></description>
             <content:encoded><![CDATA[
-                <h2>CVE-2025-15247 漏洞</h2>
-                <p><strong>编号：</strong>CVE-2025-15247</p>
+                <h2>CVE-2025-15428漏洞</h2>
+                <p><strong>编号：</strong>CVE-2025-15428</p>
                 <p><strong>来源：</strong>OSCS1024漏洞库</p>
-                <p><strong>时间：</strong>2025-12-30</p>
-                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-xesi-4507" target="_blank">https://www.oscs1024.com/hd/MPS-xesi-4507</a></p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-nvso-d0ic" target="_blank">https://www.oscs1024.com/hd/MPS-nvso-d0ic</a></p>
             ]]></content:encoded>
         </item>
 
         <item>
-            <title>CVE-2025-15246 漏洞</title>
-            <link>https://www.oscs1024.com/hd/MPS-1l4p-7zk8</link>
-            <pubDate>Tue, 30 Dec 2025 00:00:00 GMT</pubDate>
-            <guid isPermaLink="false">CVE-2025-15246</guid>
+            <title>CVE-2025-15426漏洞</title>
+            <link>https://www.oscs1024.com/hd/MPS-simr-leqz</link>
+            <pubDate>Fri, 02 Jan 2026 00:00:00 GMT</pubDate>
+            <guid isPermaLink="false">CVE-2025-15426</guid>
             <description><![CDATA[
-                <h2>CVE-2025-15246 漏洞</h2>
-                <p><strong>编号：</strong>CVE-2025-15246</p>
+                <h2>CVE-2025-15426漏洞</h2>
+                <p><strong>编号：</strong>CVE-2025-15426</p>
                 <p><strong>来源：</strong>OSCS1024漏洞库</p>
-                <p><strong>时间：</strong>2025-12-30</p>
-                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-1l4p-7zk8" target="_blank">https://www.oscs1024.com/hd/MPS-1l4p-7zk8</a></p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-simr-leqz" target="_blank">https://www.oscs1024.com/hd/MPS-simr-leqz</a></p>
             ]]></description>
             <content:encoded><![CDATA[
-                <h2>CVE-2025-15246 漏洞</h2>
-                <p><strong>编号：</strong>CVE-2025-15246</p>
+                <h2>CVE-2025-15426漏洞</h2>
+                <p><strong>编号：</strong>CVE-2025-15426</p>
                 <p><strong>来源：</strong>OSCS1024漏洞库</p>
-                <p><strong>时间：</strong>2025-12-30</p>
-                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-1l4p-7zk8" target="_blank">https://www.oscs1024.com/hd/MPS-1l4p-7zk8</a></p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-simr-leqz" target="_blank">https://www.oscs1024.com/hd/MPS-simr-leqz</a></p>
             ]]></content:encoded>
         </item>
 
         <item>
-            <title>CVE-2025-14509 漏洞</title>
-            <link>https://www.oscs1024.com/hd/MPS-brzv-j7lm</link>
-            <pubDate>Tue, 30 Dec 2025 00:00:00 GMT</pubDate>
-            <guid isPermaLink="false">CVE-2025-14509</guid>
+            <title>CVE-2025-15427漏洞</title>
+            <link>https://www.oscs1024.com/hd/MPS-atx6-unkv</link>
+            <pubDate>Fri, 02 Jan 2026 00:00:00 GMT</pubDate>
+            <guid isPermaLink="false">CVE-2025-15427</guid>
             <description><![CDATA[
-                <h2>CVE-2025-14509 漏洞</h2>
-                <p><strong>编号：</strong>CVE-2025-14509</p>
+                <h2>CVE-2025-15427漏洞</h2>
+                <p><strong>编号：</strong>CVE-2025-15427</p>
                 <p><strong>来源：</strong>OSCS1024漏洞库</p>
-                <p><strong>时间：</strong>2025-12-30</p>
-                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-brzv-j7lm" target="_blank">https://www.oscs1024.com/hd/MPS-brzv-j7lm</a></p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-atx6-unkv" target="_blank">https://www.oscs1024.com/hd/MPS-atx6-unkv</a></p>
             ]]></description>
             <content:encoded><![CDATA[
-                <h2>CVE-2025-14509 漏洞</h2>
-                <p><strong>编号：</strong>CVE-2025-14509</p>
+                <h2>CVE-2025-15427漏洞</h2>
+                <p><strong>编号：</strong>CVE-2025-15427</p>
                 <p><strong>来源：</strong>OSCS1024漏洞库</p>
-                <p><strong>时间：</strong>2025-12-30</p>
-                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-brzv-j7lm" target="_blank">https://www.oscs1024.com/hd/MPS-brzv-j7lm</a></p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-atx6-unkv" target="_blank">https://www.oscs1024.com/hd/MPS-atx6-unkv</a></p>
             ]]></content:encoded>
         </item>
 
         <item>
-            <title>CVE-2025-69014漏洞</title>
-            <link>https://www.oscs1024.com/hd/MPS-8cqe-ho2l</link>
-            <pubDate>Tue, 30 Dec 2025 00:00:00 GMT</pubDate>
-            <guid isPermaLink="false">CVE-2025-69014</guid>
+            <title>CVE-2025-15425 漏洞</title>
+            <link>https://www.oscs1024.com/hd/MPS-jgpe-5zih</link>
+            <pubDate>Fri, 02 Jan 2026 00:00:00 GMT</pubDate>
+            <guid isPermaLink="false">CVE-2025-15425</guid>
             <description><![CDATA[
-                <h2>CVE-2025-69014漏洞</h2>
-                <p><strong>编号：</strong>CVE-2025-69014</p>
+                <h2>CVE-2025-15425 漏洞</h2>
+                <p><strong>编号：</strong>CVE-2025-15425</p>
                 <p><strong>来源：</strong>OSCS1024漏洞库</p>
-                <p><strong>时间：</strong>2025-12-30</p>
-                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-8cqe-ho2l" target="_blank">https://www.oscs1024.com/hd/MPS-8cqe-ho2l</a></p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-jgpe-5zih" target="_blank">https://www.oscs1024.com/hd/MPS-jgpe-5zih</a></p>
             ]]></description>
             <content:encoded><![CDATA[
-                <h2>CVE-2025-69014漏洞</h2>
-                <p><strong>编号：</strong>CVE-2025-69014</p>
+                <h2>CVE-2025-15425 漏洞</h2>
+                <p><strong>编号：</strong>CVE-2025-15425</p>
                 <p><strong>来源：</strong>OSCS1024漏洞库</p>
-                <p><strong>时间：</strong>2025-12-30</p>
-                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-8cqe-ho2l" target="_blank">https://www.oscs1024.com/hd/MPS-8cqe-ho2l</a></p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-jgpe-5zih" target="_blank">https://www.oscs1024.com/hd/MPS-jgpe-5zih</a></p>
             ]]></content:encoded>
         </item>
 
         <item>
-            <title>CVE-2025-69013漏洞</title>
-            <link>https://www.oscs1024.com/hd/MPS-94q1-xspz</link>
-            <pubDate>Tue, 30 Dec 2025 00:00:00 GMT</pubDate>
-            <guid isPermaLink="false">CVE-2025-69013</guid>
+            <title>CVE-2025-15424 漏洞</title>
+            <link>https://www.oscs1024.com/hd/MPS-vqps-nt62</link>
+            <pubDate>Fri, 02 Jan 2026 00:00:00 GMT</pubDate>
+            <guid isPermaLink="false">CVE-2025-15424</guid>
             <description><![CDATA[
-                <h2>CVE-2025-69013漏洞</h2>
-                <p><strong>编号：</strong>CVE-2025-69013</p>
+                <h2>CVE-2025-15424 漏洞</h2>
+                <p><strong>编号：</strong>CVE-2025-15424</p>
                 <p><strong>来源：</strong>OSCS1024漏洞库</p>
-                <p><strong>时间：</strong>2025-12-30</p>
-                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-94q1-xspz" target="_blank">https://www.oscs1024.com/hd/MPS-94q1-xspz</a></p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-vqps-nt62" target="_blank">https://www.oscs1024.com/hd/MPS-vqps-nt62</a></p>
             ]]></description>
             <content:encoded><![CDATA[
-                <h2>CVE-2025-69013漏洞</h2>
-                <p><strong>编号：</strong>CVE-2025-69013</p>
+                <h2>CVE-2025-15424 漏洞</h2>
+                <p><strong>编号：</strong>CVE-2025-15424</p>
                 <p><strong>来源：</strong>OSCS1024漏洞库</p>
-                <p><strong>时间：</strong>2025-12-30</p>
-                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-94q1-xspz" target="_blank">https://www.oscs1024.com/hd/MPS-94q1-xspz</a></p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-vqps-nt62" target="_blank">https://www.oscs1024.com/hd/MPS-vqps-nt62</a></p>
             ]]></content:encoded>
         </item>
 
         <item>
-            <title>Atlassian Confluence 模板注入代码执行漏洞</title>
-            <link>https://x.threatbook.com/v5/vul/XVE-2023-2478</link>
-            <pubDate>Tue, 30 Dec 2025 00:00:00 GMT</pubDate>
-            <guid isPermaLink="false">XVE-2023-2478</guid>
+            <title>CrushFTP 身份认证绕过漏洞</title>
+            <link>https://x.threatbook.com/v5/vul/XVE-2025-27774</link>
+            <pubDate>Fri, 02 Jan 2026 00:00:00 GMT</pubDate>
+            <guid isPermaLink="false">XVE-2025-27774</guid>
             <description><![CDATA[
-                <h2>Atlassian Confluence 模板注入代码执行漏洞</h2>
-                <p><strong>编号：</strong>XVE-2023-2478</p>
+                <h2>CrushFTP 身份认证绕过漏洞</h2>
+                <p><strong>编号：</strong>XVE-2025-27774</p>
                 <p><strong>来源：</strong>微步</p>
-                <p><strong>时间：</strong>2025-12-30</p>
-                <p><strong>详情：</strong><a href="https://x.threatbook.com/v5/vul/XVE-2023-2478" target="_blank">https://x.threatbook.com/v5/vul/XVE-2023-2478</a></p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://x.threatbook.com/v5/vul/XVE-2025-27774" target="_blank">https://x.threatbook.com/v5/vul/XVE-2025-27774</a></p>
             ]]></description>
             <content:encoded><![CDATA[
-                <h2>Atlassian Confluence 模板注入代码执行漏洞</h2>
-                <p><strong>编号：</strong>XVE-2023-2478</p>
+                <h2>CrushFTP 身份认证绕过漏洞</h2>
+                <p><strong>编号：</strong>XVE-2025-27774</p>
                 <p><strong>来源：</strong>微步</p>
-                <p><strong>时间：</strong>2025-12-30</p>
-                <p><strong>详情：</strong><a href="https://x.threatbook.com/v5/vul/XVE-2023-2478" target="_blank">https://x.threatbook.com/v5/vul/XVE-2023-2478</a></p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://x.threatbook.com/v5/vul/XVE-2025-27774" target="_blank">https://x.threatbook.com/v5/vul/XVE-2025-27774</a></p>
             ]]></content:encoded>
         </item>
 
         <item>
-            <title>MongoDB zlib 信息泄露漏洞</title>
-            <link>https://x.threatbook.com/v5/vul/XVE-2025-48876</link>
-            <pubDate>Tue, 30 Dec 2025 00:00:00 GMT</pubDate>
-            <guid isPermaLink="false">XVE-2025-48876</guid>
+            <title>fastadmin 任意文件读取漏洞</title>
+            <link>https://x.threatbook.com/v5/vul/XVE-2023-35783</link>
+            <pubDate>Fri, 02 Jan 2026 00:00:00 GMT</pubDate>
+            <guid isPermaLink="false">XVE-2023-35783</guid>
             <description><![CDATA[
-                <h2>MongoDB zlib 信息泄露漏洞</h2>
-                <p><strong>编号：</strong>XVE-2025-48876</p>
+                <h2>fastadmin 任意文件读取漏洞</h2>
+                <p><strong>编号：</strong>XVE-2023-35783</p>
                 <p><strong>来源：</strong>微步</p>
-                <p><strong>时间：</strong>2025-12-30</p>
-                <p><strong>详情：</strong><a href="https://x.threatbook.com/v5/vul/XVE-2025-48876" target="_blank">https://x.threatbook.com/v5/vul/XVE-2025-48876</a></p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://x.threatbook.com/v5/vul/XVE-2023-35783" target="_blank">https://x.threatbook.com/v5/vul/XVE-2023-35783</a></p>
             ]]></description>
             <content:encoded><![CDATA[
-                <h2>MongoDB zlib 信息泄露漏洞</h2>
-                <p><strong>编号：</strong>XVE-2025-48876</p>
+                <h2>fastadmin 任意文件读取漏洞</h2>
+                <p><strong>编号：</strong>XVE-2023-35783</p>
                 <p><strong>来源：</strong>微步</p>
-                <p><strong>时间：</strong>2025-12-30</p>
-                <p><strong>详情：</strong><a href="https://x.threatbook.com/v5/vul/XVE-2025-48876" target="_blank">https://x.threatbook.com/v5/vul/XVE-2025-48876</a></p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://x.threatbook.com/v5/vul/XVE-2023-35783" target="_blank">https://x.threatbook.com/v5/vul/XVE-2023-35783</a></p>
             ]]></content:encoded>
         </item>
 
         <item>
-            <title>React组件 远程代码执行漏洞</title>
-            <link>https://x.threatbook.com/v5/vul/XVE-2025-42672</link>
-            <pubDate>Tue, 30 Dec 2025 00:00:00 GMT</pubDate>
-            <guid isPermaLink="false">XVE-2025-42672</guid>
+            <title>WordPress Bricks Builder 远程代码执行漏洞</title>
+            <link>https://x.threatbook.com/v5/vul/XVE-2024-4943</link>
+            <pubDate>Fri, 02 Jan 2026 00:00:00 GMT</pubDate>
+            <guid isPermaLink="false">XVE-2024-4943</guid>
             <description><![CDATA[
-                <h2>React组件 远程代码执行漏洞</h2>
-                <p><strong>编号：</strong>XVE-2025-42672</p>
+                <h2>WordPress Bricks Builder 远程代码执行漏洞</h2>
+                <p><strong>编号：</strong>XVE-2024-4943</p>
                 <p><strong>来源：</strong>微步</p>
-                <p><strong>时间：</strong>2025-12-30</p>
-                <p><strong>详情：</strong><a href="https://x.threatbook.com/v5/vul/XVE-2025-42672" target="_blank">https://x.threatbook.com/v5/vul/XVE-2025-42672</a></p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://x.threatbook.com/v5/vul/XVE-2024-4943" target="_blank">https://x.threatbook.com/v5/vul/XVE-2024-4943</a></p>
             ]]></description>
             <content:encoded><![CDATA[
-                <h2>React组件 远程代码执行漏洞</h2>
-                <p><strong>编号：</strong>XVE-2025-42672</p>
+                <h2>WordPress Bricks Builder 远程代码执行漏洞</h2>
+                <p><strong>编号：</strong>XVE-2024-4943</p>
                 <p><strong>来源：</strong>微步</p>
-                <p><strong>时间：</strong>2025-12-30</p>
-                <p><strong>详情：</strong><a href="https://x.threatbook.com/v5/vul/XVE-2025-42672" target="_blank">https://x.threatbook.com/v5/vul/XVE-2025-42672</a></p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://x.threatbook.com/v5/vul/XVE-2024-4943" target="_blank">https://x.threatbook.com/v5/vul/XVE-2024-4943</a></p>
             ]]></content:encoded>
         </item>
 
         <item>
-            <title>Confluence webwork OGNL 远程命令执行漏洞</title>
-            <link>https://x.threatbook.com/v5/vul/XVE-2022-4991</link>
-            <pubDate>Tue, 30 Dec 2025 00:00:00 GMT</pubDate>
-            <guid isPermaLink="false">XVE-2022-4991</guid>
+            <title>CVE-2025-15435漏洞</title>
+            <link>https://www.oscs1024.com/hd/MPS-ip3e-zr8h</link>
+            <pubDate>Fri, 02 Jan 2026 00:00:00 GMT</pubDate>
+            <guid isPermaLink="false">CVE-2025-15435</guid>
             <description><![CDATA[
-                <h2>Confluence webwork OGNL 远程命令执行漏洞</h2>
-                <p><strong>编号：</strong>XVE-2022-4991</p>
-                <p><strong>来源：</strong>微步</p>
-                <p><strong>时间：</strong>2025-12-30</p>
-                <p><strong>详情：</strong><a href="https://x.threatbook.com/v5/vul/XVE-2022-4991" target="_blank">https://x.threatbook.com/v5/vul/XVE-2022-4991</a></p>
+                <h2>CVE-2025-15435漏洞</h2>
+                <p><strong>编号：</strong>CVE-2025-15435</p>
+                <p><strong>来源：</strong>OSCS1024漏洞库</p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-ip3e-zr8h" target="_blank">https://www.oscs1024.com/hd/MPS-ip3e-zr8h</a></p>
             ]]></description>
             <content:encoded><![CDATA[
-                <h2>Confluence webwork OGNL 远程命令执行漏洞</h2>
-                <p><strong>编号：</strong>XVE-2022-4991</p>
-                <p><strong>来源：</strong>微步</p>
-                <p><strong>时间：</strong>2025-12-30</p>
-                <p><strong>详情：</strong><a href="https://x.threatbook.com/v5/vul/XVE-2022-4991" target="_blank">https://x.threatbook.com/v5/vul/XVE-2022-4991</a></p>
+                <h2>CVE-2025-15435漏洞</h2>
+                <p><strong>编号：</strong>CVE-2025-15435</p>
+                <p><strong>来源：</strong>OSCS1024漏洞库</p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-ip3e-zr8h" target="_blank">https://www.oscs1024.com/hd/MPS-ip3e-zr8h</a></p>
             ]]></content:encoded>
         </item>
 
         <item>
-            <title>vLLM 拒绝服务漏洞</title>
-            <link>https://x.threatbook.com/v5/vul/XVE-2025-41632</link>
-            <pubDate>Tue, 30 Dec 2025 00:00:00 GMT</pubDate>
-            <guid isPermaLink="false">XVE-2025-41632</guid>
+            <title>CVE-2025-15436漏洞</title>
+            <link>https://www.oscs1024.com/hd/MPS-uj1i-tnd7</link>
+            <pubDate>Fri, 02 Jan 2026 00:00:00 GMT</pubDate>
+            <guid isPermaLink="false">CVE-2025-15436</guid>
             <description><![CDATA[
-                <h2>vLLM 拒绝服务漏洞</h2>
-                <p><strong>编号：</strong>XVE-2025-41632</p>
-                <p><strong>来源：</strong>微步</p>
-                <p><strong>时间：</strong>2025-12-30</p>
-                <p><strong>详情：</strong><a href="https://x.threatbook.com/v5/vul/XVE-2025-41632" target="_blank">https://x.threatbook.com/v5/vul/XVE-2025-41632</a></p>
+                <h2>CVE-2025-15436漏洞</h2>
+                <p><strong>编号：</strong>CVE-2025-15436</p>
+                <p><strong>来源：</strong>OSCS1024漏洞库</p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-uj1i-tnd7" target="_blank">https://www.oscs1024.com/hd/MPS-uj1i-tnd7</a></p>
             ]]></description>
             <content:encoded><![CDATA[
-                <h2>vLLM 拒绝服务漏洞</h2>
-                <p><strong>编号：</strong>XVE-2025-41632</p>
-                <p><strong>来源：</strong>微步</p>
-                <p><strong>时间：</strong>2025-12-30</p>
-                <p><strong>详情：</strong><a href="https://x.threatbook.com/v5/vul/XVE-2025-41632" target="_blank">https://x.threatbook.com/v5/vul/XVE-2025-41632</a></p>
+                <h2>CVE-2025-15436漏洞</h2>
+                <p><strong>编号：</strong>CVE-2025-15436</p>
+                <p><strong>来源：</strong>OSCS1024漏洞库</p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-uj1i-tnd7" target="_blank">https://www.oscs1024.com/hd/MPS-uj1i-tnd7</a></p>
             ]]></content:encoded>
         </item>
 
         <item>
-            <title>Oracle E-Business Suite 远程代码执行漏洞</title>
-            <link>https://x.threatbook.com/v5/vul/XVE-2025-36247</link>
-            <pubDate>Tue, 30 Dec 2025 00:00:00 GMT</pubDate>
-            <guid isPermaLink="false">XVE-2025-36247</guid>
+            <title>React组件 拒绝服务漏洞</title>
+            <link>https://x.threatbook.com/v5/vul/XVE-2025-45922</link>
+            <pubDate>Fri, 02 Jan 2026 00:00:00 GMT</pubDate>
+            <guid isPermaLink="false">XVE-2025-45922</guid>
             <description><![CDATA[
-                <h2>Oracle E-Business Suite 远程代码执行漏洞</h2>
-                <p><strong>编号：</strong>XVE-2025-36247</p>
+                <h2>React组件 拒绝服务漏洞</h2>
+                <p><strong>编号：</strong>XVE-2025-45922</p>
                 <p><strong>来源：</strong>微步</p>
-                <p><strong>时间：</strong>2025-12-30</p>
-                <p><strong>详情：</strong><a href="https://x.threatbook.com/v5/vul/XVE-2025-36247" target="_blank">https://x.threatbook.com/v5/vul/XVE-2025-36247</a></p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://x.threatbook.com/v5/vul/XVE-2025-45922" target="_blank">https://x.threatbook.com/v5/vul/XVE-2025-45922</a></p>
             ]]></description>
             <content:encoded><![CDATA[
-                <h2>Oracle E-Business Suite 远程代码执行漏洞</h2>
-                <p><strong>编号：</strong>XVE-2025-36247</p>
+                <h2>React组件 拒绝服务漏洞</h2>
+                <p><strong>编号：</strong>XVE-2025-45922</p>
                 <p><strong>来源：</strong>微步</p>
-                <p><strong>时间：</strong>2025-12-30</p>
-                <p><strong>详情：</strong><a href="https://x.threatbook.com/v5/vul/XVE-2025-36247" target="_blank">https://x.threatbook.com/v5/vul/XVE-2025-36247</a></p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://x.threatbook.com/v5/vul/XVE-2025-45922" target="_blank">https://x.threatbook.com/v5/vul/XVE-2025-45922</a></p>
             ]]></content:encoded>
         </item>
 
         <item>
-            <title>Telos Alliance Omnia MPX Node 未授权访问</title>
-            <link>https://x.threatbook.com/v5/vul/XVE-2022-17436</link>
-            <pubDate>Tue, 30 Dec 2025 00:00:00 GMT</pubDate>
-            <guid isPermaLink="false">XVE-2022-17436</guid>
+            <title>CVE-2026-0546漏洞</title>
+            <link>https://www.oscs1024.com/hd/MPS-fgm9-onjr</link>
+            <pubDate>Fri, 02 Jan 2026 00:00:00 GMT</pubDate>
+            <guid isPermaLink="false">CVE-2026-0546</guid>
             <description><![CDATA[
-                <h2>Telos Alliance Omnia MPX Node 未授权访问</h2>
-                <p><strong>编号：</strong>XVE-2022-17436</p>
-                <p><strong>来源：</strong>微步</p>
-                <p><strong>时间：</strong>2025-12-30</p>
-                <p><strong>详情：</strong><a href="https://x.threatbook.com/v5/vul/XVE-2022-17436" target="_blank">https://x.threatbook.com/v5/vul/XVE-2022-17436</a></p>
+                <h2>CVE-2026-0546漏洞</h2>
+                <p><strong>编号：</strong>CVE-2026-0546</p>
+                <p><strong>来源：</strong>OSCS1024漏洞库</p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-fgm9-onjr" target="_blank">https://www.oscs1024.com/hd/MPS-fgm9-onjr</a></p>
             ]]></description>
             <content:encoded><![CDATA[
-                <h2>Telos Alliance Omnia MPX Node 未授权访问</h2>
-                <p><strong>编号：</strong>XVE-2022-17436</p>
+                <h2>CVE-2026-0546漏洞</h2>
+                <p><strong>编号：</strong>CVE-2026-0546</p>
+                <p><strong>来源：</strong>OSCS1024漏洞库</p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-fgm9-onjr" target="_blank">https://www.oscs1024.com/hd/MPS-fgm9-onjr</a></p>
+            ]]></content:encoded>
+        </item>
+
+        <item>
+            <title>CVE-2026-0547漏洞</title>
+            <link>https://www.oscs1024.com/hd/MPS-gdac-hupk</link>
+            <pubDate>Fri, 02 Jan 2026 00:00:00 GMT</pubDate>
+            <guid isPermaLink="false">CVE-2026-0547</guid>
+            <description><![CDATA[
+                <h2>CVE-2026-0547漏洞</h2>
+                <p><strong>编号：</strong>CVE-2026-0547</p>
+                <p><strong>来源：</strong>OSCS1024漏洞库</p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-gdac-hupk" target="_blank">https://www.oscs1024.com/hd/MPS-gdac-hupk</a></p>
+            ]]></description>
+            <content:encoded><![CDATA[
+                <h2>CVE-2026-0547漏洞</h2>
+                <p><strong>编号：</strong>CVE-2026-0547</p>
+                <p><strong>来源：</strong>OSCS1024漏洞库</p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://www.oscs1024.com/hd/MPS-gdac-hupk" target="_blank">https://www.oscs1024.com/hd/MPS-gdac-hupk</a></p>
+            ]]></content:encoded>
+        </item>
+
+        <item>
+            <title>React组件 拒绝服务漏洞</title>
+            <link>https://x.threatbook.com/v5/vul/XVE-2025-46026</link>
+            <pubDate>Fri, 02 Jan 2026 00:00:00 GMT</pubDate>
+            <guid isPermaLink="false">XVE-2025-46026</guid>
+            <description><![CDATA[
+                <h2>React组件 拒绝服务漏洞</h2>
+                <p><strong>编号：</strong>XVE-2025-46026</p>
                 <p><strong>来源：</strong>微步</p>
-                <p><strong>时间：</strong>2025-12-30</p>
-                <p><strong>详情：</strong><a href="https://x.threatbook.com/v5/vul/XVE-2022-17436" target="_blank">https://x.threatbook.com/v5/vul/XVE-2022-17436</a></p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://x.threatbook.com/v5/vul/XVE-2025-46026" target="_blank">https://x.threatbook.com/v5/vul/XVE-2025-46026</a></p>
+            ]]></description>
+            <content:encoded><![CDATA[
+                <h2>React组件 拒绝服务漏洞</h2>
+                <p><strong>编号：</strong>XVE-2025-46026</p>
+                <p><strong>来源：</strong>微步</p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://x.threatbook.com/v5/vul/XVE-2025-46026" target="_blank">https://x.threatbook.com/v5/vul/XVE-2025-46026</a></p>
+            ]]></content:encoded>
+        </item>
+
+        <item>
+            <title>React组件 信息泄露漏洞</title>
+            <link>https://x.threatbook.com/v5/vul/XVE-2025-45925</link>
+            <pubDate>Fri, 02 Jan 2026 00:00:00 GMT</pubDate>
+            <guid isPermaLink="false">XVE-2025-45925</guid>
+            <description><![CDATA[
+                <h2>React组件 信息泄露漏洞</h2>
+                <p><strong>编号：</strong>XVE-2025-45925</p>
+                <p><strong>来源：</strong>微步</p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://x.threatbook.com/v5/vul/XVE-2025-45925" target="_blank">https://x.threatbook.com/v5/vul/XVE-2025-45925</a></p>
+            ]]></description>
+            <content:encoded><![CDATA[
+                <h2>React组件 信息泄露漏洞</h2>
+                <p><strong>编号：</strong>XVE-2025-45925</p>
+                <p><strong>来源：</strong>微步</p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://x.threatbook.com/v5/vul/XVE-2025-45925" target="_blank">https://x.threatbook.com/v5/vul/XVE-2025-45925</a></p>
+            ]]></content:encoded>
+        </item>
+
+        <item>
+            <title>Apache Spark UI命令注入漏洞</title>
+            <link>https://x.threatbook.com/v5/vul/XVE-2022-14295</link>
+            <pubDate>Fri, 02 Jan 2026 00:00:00 GMT</pubDate>
+            <guid isPermaLink="false">XVE-2022-14295</guid>
+            <description><![CDATA[
+                <h2>Apache Spark UI命令注入漏洞</h2>
+                <p><strong>编号：</strong>XVE-2022-14295</p>
+                <p><strong>来源：</strong>微步</p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://x.threatbook.com/v5/vul/XVE-2022-14295" target="_blank">https://x.threatbook.com/v5/vul/XVE-2022-14295</a></p>
+            ]]></description>
+            <content:encoded><![CDATA[
+                <h2>Apache Spark UI命令注入漏洞</h2>
+                <p><strong>编号：</strong>XVE-2022-14295</p>
+                <p><strong>来源：</strong>微步</p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://x.threatbook.com/v5/vul/XVE-2022-14295" target="_blank">https://x.threatbook.com/v5/vul/XVE-2022-14295</a></p>
+            ]]></content:encoded>
+        </item>
+
+        <item>
+            <title>alibaba nacos 认证绕过漏洞</title>
+            <link>https://x.threatbook.com/v5/vul/XVE-2021-16851</link>
+            <pubDate>Fri, 02 Jan 2026 00:00:00 GMT</pubDate>
+            <guid isPermaLink="false">XVE-2021-16851</guid>
+            <description><![CDATA[
+                <h2>alibaba nacos 认证绕过漏洞</h2>
+                <p><strong>编号：</strong>XVE-2021-16851</p>
+                <p><strong>来源：</strong>微步</p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://x.threatbook.com/v5/vul/XVE-2021-16851" target="_blank">https://x.threatbook.com/v5/vul/XVE-2021-16851</a></p>
+            ]]></description>
+            <content:encoded><![CDATA[
+                <h2>alibaba nacos 认证绕过漏洞</h2>
+                <p><strong>编号：</strong>XVE-2021-16851</p>
+                <p><strong>来源：</strong>微步</p>
+                <p><strong>时间：</strong>2026-01-02</p>
+                <p><strong>详情：</strong><a href="https://x.threatbook.com/v5/vul/XVE-2021-16851" target="_blank">https://x.threatbook.com/v5/vul/XVE-2021-16851</a></p>
             ]]></content:encoded>
         </item>
 
